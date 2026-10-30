@@ -1,0 +1,6 @@
+{
+  "name": "RIWAAYAT WEAR",
+  "description": "Premium Pakistani luxury clothing brand specializing in traditional and modern shalwar kameez for men and women. Timeless Tradition, Modern Style.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
