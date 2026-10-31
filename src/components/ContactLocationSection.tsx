@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MapPin, Phone, Mail, Clock, Send, CheckCircle, ExternalLink } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, Send, CheckCircle } from 'lucide-react';
 import { DISPLAY_WHATSAPP_NUMBER, createWhatsAppUrl } from '../utils/whatsapp';
 import { WhatsAppIcon } from './FloatingWhatsApp';
 
@@ -52,8 +52,6 @@ export function ContactLocationSection() {
     }
   };
 
-  const mapsUrl = "https://maps.google.com/?q=Government+Graduate+College+of+Science+Wahdat+Road+Lahore+Pakistan";
-
   return (
     <section id="contact-section" className="py-16 sm:py-24 bg-[#F7F4EC] border-t border-[#D4AF37]/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -89,15 +87,6 @@ export function ContactLocationSection() {
                   <p className="text-sm text-neutral-700 leading-relaxed font-medium">
                     Science College, Wahdat Road, Lahore, Pakistan.
                   </p>
-                  <a
-                    href={mapsUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-xs text-[#997B2C] hover:text-[#121212] font-semibold mt-2 transition-colors"
-                  >
-                    <span>View on Google Maps</span>
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
                 </div>
               </div>
 
@@ -146,19 +135,20 @@ export function ContactLocationSection() {
               </div>
             </div>
 
-            {/* Embedded Google Map Frame */}
-            <div className="w-full h-64 sm:h-72 bg-neutral-200 border border-[#D4AF37]/30 overflow-hidden shadow-sm relative">
-              <iframe
-                title="Riwaayat Wear Location at Science College Wahdat Road Lahore"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                loading="lazy"
-                allowFullScreen
-                src="https://maps.google.com/maps?q=Government+Graduate+College+of+Science+Wahdat+Road+Lahore+Pakistan&t=&z=15&ie=UTF8&iwloc=&output=embed"
-              />
-              <div className="absolute bottom-2 right-2 bg-white/90 px-3 py-1 text-[11px] font-medium text-neutral-700 shadow border">
-                Wahdat Road, Lahore
+            {/* Nationwide Delivery & Concierge Card (Replacing Map) */}
+            <div className="bg-[#121212] text-white p-6 sm:p-7 border border-[#D4AF37]/30 space-y-4">
+              <span className="text-[10px] tracking-[0.25em] uppercase text-[#D4AF37] font-semibold block">
+                Order & Delivery Assistance
+              </span>
+              <h4 className="font-serif text-xl font-medium text-white">
+                Nationwide Express Dispatch from Lahore
+              </h4>
+              <p className="text-xs text-neutral-300 leading-relaxed">
+                All garments are inspected, hand-finished, and securely packaged at our Lahore atelier before being dispatched via insured express courier across Pakistan.
+              </p>
+              <div className="pt-2 border-t border-white/10 flex items-center justify-between text-xs text-neutral-400">
+                <span>Standard Delivery: 3–5 Business Days</span>
+                <span className="text-[#D4AF37] font-semibold">Cash on Delivery (COD)</span>
               </div>
             </div>
           </div>

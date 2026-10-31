@@ -331,16 +331,8 @@ function writeDb(data: any) {
 // In-memory active admin tokens
 const activeSessions = new Set<string>();
 
-// Middleware to authenticate admin
+// Middleware to authenticate admin (Unlocked mode as requested by owner: no password needed right now)
 function requireAdmin(req: Request, res: Response, next: NextFunction) {
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'Unauthorized: Admin authentication token required' });
-  }
-  const token = authHeader.split(' ')[1];
-  if (!activeSessions.has(token)) {
-    return res.status(401).json({ error: 'Unauthorized: Session expired or invalid' });
-  }
   next();
 }
 
@@ -374,25 +366,17 @@ app.post('/api/admin/login', (req, res) => {
   return res.status(401).json({ error: 'Invalid username/email or password.' });
 });
 
-// Admin Verify Token Route
+// Admin Verify Token Route (Unlocked mode: always grants session)
 app.get('/api/admin/verify', (req, res) => {
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ valid: false });
-  }
-  const token = authHeader.split(' ')[1];
-  if (activeSessions.has(token)) {
-    const db = readDb();
-    return res.json({
-      valid: true,
-      user: {
-        username: db.admin.username,
-        email: db.admin.email,
-        role: 'superadmin'
-      }
-    });
-  }
-  return res.status(401).json({ valid: false });
+  const db = readDb();
+  return res.json({
+    valid: true,
+    user: {
+      username: db.admin.username || 'admin',
+      email: db.admin.email || 'admin@riwaayatwear.com',
+      role: 'superadmin'
+    }
+  });
 });
 
 // Admin Logout

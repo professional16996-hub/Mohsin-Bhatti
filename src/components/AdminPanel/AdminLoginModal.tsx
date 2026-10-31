@@ -12,8 +12,15 @@ export function AdminLoginModal({ isOpen, onClose, onLoginSuccess }: AdminLoginM
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const handleAutofill = () => {
+    setUsername('admin');
+    setPassword('Riwaayat@Admin2026');
+    setError('');
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,14 +55,14 @@ export function AdminLoginModal({ isOpen, onClose, onLoginSuccess }: AdminLoginM
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-200">
       <div 
-        className="relative bg-[#121212] text-white w-full max-w-md shadow-2xl border border-[#D4AF37]/50 p-6 sm:p-8"
+        className="relative bg-[#121212] text-white w-full max-w-md shadow-2xl border-2 border-[#D4AF37]/50 p-6 sm:p-8"
         onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-white/50 hover:text-white transition-colors"
+          className="absolute top-4 right-4 text-white/50 hover:text-white transition-colors p-1 rounded-full hover:bg-white/10"
           aria-label="Close login dialog"
         >
           <X className="w-5 h-5" />
@@ -63,22 +70,22 @@ export function AdminLoginModal({ isOpen, onClose, onLoginSuccess }: AdminLoginM
 
         {/* Brand Kicker */}
         <div className="text-center mb-6">
-          <div className="w-12 h-12 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] flex items-center justify-center mx-auto mb-3">
-            <Shield className="w-6 h-6" />
+          <div className="w-14 h-14 rounded-full bg-[#D4AF37]/15 border border-[#D4AF37]/40 text-[#D4AF37] flex items-center justify-center mx-auto mb-3 shadow-inner">
+            <Shield className="w-7 h-7" />
           </div>
-          <span className="text-[10px] tracking-[0.3em] uppercase text-[#D4AF37] font-semibold block">
+          <span className="text-[10px] tracking-[0.3em] uppercase text-[#D4AF37] font-bold block">
             Authorized Personnel Only
           </span>
-          <h2 className="font-serif text-2xl font-semibold tracking-wide text-white mt-1">
-            Riwaayat Wear Admin Portal
+          <h2 className="font-serif text-2xl sm:text-3xl font-medium tracking-wide text-white mt-1">
+            Admin Management Suite
           </h2>
-          <p className="text-xs text-neutral-400 mt-1">
-            Sign in to manage catalog, orders, and store operations
+          <p className="text-xs text-neutral-400 mt-1.5">
+            RIWAAYAT WEAR Atelier & Store Operations
           </p>
         </div>
 
         {error && (
-          <div className="mb-4 p-3 bg-red-950/60 border border-red-800 text-red-200 text-xs flex items-center gap-2">
+          <div className="mb-4 p-3 bg-red-950/80 border border-red-700 text-red-200 text-xs flex items-center gap-2">
             <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
             <span>{error}</span>
           </div>
@@ -86,60 +93,73 @@ export function AdminLoginModal({ isOpen, onClose, onLoginSuccess }: AdminLoginM
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs uppercase tracking-wider font-semibold text-neutral-300 mb-1">
-              Admin Username / Email
+            <label className="block text-xs uppercase tracking-wider font-semibold text-neutral-300 mb-1.5">
+              Admin Username or Email
             </label>
-            <div className="relative">
-              <input
-                type="text"
-                required
-                autoFocus
-                placeholder="admin or admin@riwaayatwear.com"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-neutral-900 border border-neutral-700 text-white text-sm focus:outline-none focus:border-[#D4AF37] placeholder-neutral-500"
-              />
-            </div>
+            <input
+              type="text"
+              required
+              autoFocus
+              placeholder="admin"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full px-3.5 py-2.5 bg-neutral-900 border border-neutral-700 text-white text-sm focus:outline-none focus:border-[#D4AF37] placeholder-neutral-500"
+            />
           </div>
 
           <div>
-            <label className="block text-xs uppercase tracking-wider font-semibold text-neutral-300 mb-1">
-              Password
-            </label>
-            <div className="relative">
-              <input
-                type="password"
-                required
-                placeholder="••••••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-neutral-900 border border-neutral-700 text-white text-sm focus:outline-none focus:border-[#D4AF37] placeholder-neutral-500"
-              />
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-xs uppercase tracking-wider font-semibold text-neutral-300">
+                Password
+              </label>
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="text-[11px] text-[#D4AF37] hover:underline"
+              >
+                {showPassword ? 'Hide Password' : 'Show Password'}
+              </button>
             </div>
+            <input
+              type={showPassword ? 'text' : 'password'}
+              required
+              placeholder="Enter password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-3.5 py-2.5 bg-neutral-900 border border-neutral-700 text-white text-sm focus:outline-none focus:border-[#D4AF37] placeholder-neutral-500 font-mono"
+            />
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-3 bg-[#D4AF37] hover:bg-[#c5a059] text-[#121212] text-xs uppercase tracking-widest font-bold transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 mt-2"
-          >
-            <KeyRound className="w-4 h-4" />
-            <span>{loading ? 'Authenticating...' : 'Secure Admin Login'}</span>
-          </button>
+          <div className="pt-2 space-y-2.5">
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-3 bg-[#D4AF37] hover:bg-[#c5a059] text-[#121212] text-xs uppercase tracking-widest font-bold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg disabled:opacity-50"
+            >
+              <KeyRound className="w-4 h-4" />
+              <span>{loading ? 'Authenticating...' : 'Sign In to Admin Dashboard'}</span>
+            </button>
+
+            {/* Quick 1-Click Autofill Button for Convenience */}
+            <button
+              type="button"
+              onClick={handleAutofill}
+              className="w-full py-2 bg-white/5 hover:bg-white/10 text-neutral-300 hover:text-white border border-white/20 text-[11px] uppercase tracking-wider font-medium transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]" />
+              <span>Autofill Master Admin Credentials</span>
+            </button>
+          </div>
         </form>
 
-        {/* Initial Setup Credentials Notice */}
-        <div className="mt-6 pt-4 border-t border-neutral-800 text-[11px] text-neutral-400 bg-neutral-900/50 p-3 border border-neutral-800">
-          <p className="font-semibold text-[#D4AF37] mb-1 flex items-center gap-1">
-            <Sparkles className="w-3.5 h-3.5" /> Initial Admin Credentials:
-          </p>
-          <div className="font-mono text-neutral-300 space-y-0.5">
-            <div>User: <span className="text-white">admin</span></div>
-            <div>Password: <span className="text-white">Riwaayat@Admin2026</span></div>
+        {/* Help Info Box */}
+        <div className="mt-5 pt-3.5 border-t border-neutral-800 text-[11px] text-neutral-400 bg-neutral-900/60 p-3 border border-neutral-800 flex items-start gap-2.5">
+          <Shield className="w-4 h-4 text-[#D4AF37] shrink-0 mt-0.5" />
+          <div className="leading-relaxed">
+            <span className="text-white font-semibold">Master Access: </span>
+            User: <code className="text-[#D4AF37] bg-black/40 px-1 py-0.5 font-mono">admin</code> | 
+            Pass: <code className="text-[#D4AF37] bg-black/40 px-1 py-0.5 font-mono">Riwaayat@Admin2026</code>
           </div>
-          <p className="text-[10px] text-neutral-500 mt-1">
-            (You can update credentials anytime inside the Admin Security tab)
-          </p>
         </div>
       </div>
     </div>

@@ -18,8 +18,6 @@ export function Footer({
   onSelectCategory,
   categories,
 }: FooterProps) {
-  const mapsUrl = "https://maps.google.com/?q=Government+Graduate+College+of+Science+Wahdat+Road+Lahore+Pakistan";
-
   return (
     <footer className="bg-[#121212] text-white border-t border-[#D4AF37]/30 pt-16 pb-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -154,17 +152,6 @@ export function Footer({
                   className="hover:text-[#25D366] transition-colors font-mono font-bold"
                 >
                   WhatsApp: {DISPLAY_WHATSAPP_NUMBER}
-                </a>
-              </div>
-
-              <div className="pt-2">
-                <a
-                  href={mapsUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block text-[11px] text-[#D4AF37] hover:underline"
-                >
-                  Get Directions via Google Maps →
                 </a>
               </div>
             </div>

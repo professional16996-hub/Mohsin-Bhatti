@@ -54,11 +54,9 @@ export default function App() {
   // Informational Modals
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
 
-  // Admin Panel State
-  const [adminToken, setAdminToken] = useState<string | null>(() => {
-    return localStorage.getItem('rw_admin_token') || null;
-  });
-  const [adminUser, setAdminUser] = useState<any>(null);
+  // Admin Panel State (Unlocked: Direct Access as requested)
+  const [adminToken, setAdminToken] = useState<string>('rw-unlocked-master-token');
+  const [adminUser, setAdminUser] = useState<any>({ username: 'admin', role: 'superadmin' });
   const [isAdminLoginOpen, setIsAdminLoginOpen] = useState(false);
   const [isAdminDashboardOpen, setIsAdminDashboardOpen] = useState(false);
 
@@ -100,27 +98,17 @@ export default function App() {
     }
   };
 
-  // Verify stored admin token on load
+  // Admin auto-granted in unlocked mode
   useEffect(() => {
     loadData();
-
-    if (adminToken) {
-      fetch('/api/admin/verify', {
-        headers: { Authorization: `Bearer ${adminToken}` },
+    fetch('/api/admin/verify', {
+      headers: { Authorization: `Bearer rw-unlocked-master-token` },
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.user) setAdminUser(data.user);
       })
-        .then((r) => r.json())
-        .then((data) => {
-          if (data.valid) {
-            setAdminUser(data.user);
-          } else {
-            setAdminToken(null);
-            localStorage.removeItem('rw_admin_token');
-          }
-        })
-        .catch(() => {
-          setAdminToken(null);
-        });
-    }
+      .catch(() => {});
   }, []);
 
   // Cart operations
@@ -171,13 +159,9 @@ export default function App() {
     setCartItems([]);
   };
 
-  // Admin Handlers
+  // Admin Handlers - DIRECT UNLOCKED ACCESS
   const handleOpenAdmin = () => {
-    if (adminToken) {
-      setIsAdminDashboardOpen(true);
-    } else {
-      setIsAdminLoginOpen(true);
-    }
+    setIsAdminDashboardOpen(true);
   };
 
   const handleAdminLoginSuccess = (token: string, user: any) => {
@@ -187,22 +171,9 @@ export default function App() {
     showToast('Signed in to Admin Suite successfully');
   };
 
-  const handleAdminLogout = async () => {
-    if (adminToken) {
-      try {
-        await fetch('/api/admin/logout', {
-          method: 'POST',
-          headers: { Authorization: `Bearer ${adminToken}` },
-        });
-      } catch (e) {
-        console.error(e);
-      }
-    }
-    setAdminToken(null);
-    setAdminUser(null);
-    localStorage.removeItem('rw_admin_token');
+  const handleAdminLogout = () => {
     setIsAdminDashboardOpen(false);
-    showToast('Signed out from Admin Suite');
+    showToast('Returned to Storefront');
   };
 
   // Navigation scroll helpers

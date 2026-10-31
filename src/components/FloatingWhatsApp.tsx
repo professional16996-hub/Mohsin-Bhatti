@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { getGeneralInquiryUrl, DISPLAY_WHATSAPP_NUMBER } from '../utils/whatsapp';
+import React from 'react';
+import { getGeneralInquiryUrl } from '../utils/whatsapp';
 
 export function WhatsAppIcon({ className = "w-6 h-6", color = "white" }: { className?: string; color?: string }) {
   return (
@@ -18,37 +18,18 @@ export function WhatsAppIcon({ className = "w-6 h-6", color = "white" }: { class
 }
 
 export function FloatingWhatsApp() {
-  const [showTooltip, setShowTooltip] = useState(false);
   const whatsappUrl = getGeneralInquiryUrl();
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex items-center group">
-      {/* Tooltip bubble */}
-      <div 
-        className={`mr-3 hidden md:flex items-center gap-2 bg-[#121212] text-white px-4 py-2.5 rounded-full shadow-2xl border border-[#D4AF37]/30 transition-all duration-300 ${
-          showTooltip ? 'opacity-100 translate-x-0' : 'opacity-90 translate-x-1 group-hover:opacity-100 group-hover:translate-x-0'
-        }`}
-      >
-        <div className="w-2 h-2 rounded-full bg-[#25D366] animate-pulse" />
-        <span className="text-xs font-medium tracking-wide">
-          Chat with Us on WhatsApp <span className="text-[#D4AF37] font-semibold">({DISPLAY_WHATSAPP_NUMBER})</span>
-        </span>
-      </div>
-
-      {/* Official WhatsApp Button */}
+    <div className="fixed bottom-6 right-6 z-50 flex items-center">
+      {/* Clean Official WhatsApp Button */}
       <a
         href={whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
-        onMouseEnter={() => setShowTooltip(true)}
-        onMouseLeave={() => setShowTooltip(false)}
-        className="relative flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-full bg-[#25D366] text-white shadow-2xl hover:scale-105 active:scale-95 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-[#25D366]/40 cursor-pointer"
+        className="flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-full bg-[#25D366] text-white shadow-2xl hover:scale-105 active:scale-95 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-[#25D366]/40 cursor-pointer"
         aria-label="Chat on WhatsApp with Riwaayat Wear Official 03210424424"
       >
-        <span className="absolute -top-1 -right-1 flex h-4 w-4">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-4 w-4 bg-[#D4AF37] border-2 border-white"></span>
-        </span>
         <WhatsAppIcon className="w-7 h-7 md:w-8 md:h-8" />
       </a>
     </div>
