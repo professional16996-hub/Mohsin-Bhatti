@@ -72,7 +72,7 @@ export function Header({
               }}
               className="inline-block group"
             >
-              <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl tracking-[0.25em] sm:tracking-[0.3em] font-medium text-[#121212] uppercase transition-colors group-hover:text-[#997B2C]">
+              <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl tracking-[0.25em] sm:tracking-[0.3em] font-bold text-[#121212] uppercase transition-colors group-hover:text-[#997B2C]">
                 RIWAAYAT WEAR
               </h1>
               <p className="text-[9px] sm:text-[10px] tracking-[0.3em] uppercase text-[#C5A059] font-medium -mt-1 hidden sm:block">

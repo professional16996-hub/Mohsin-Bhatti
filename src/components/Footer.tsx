@@ -26,7 +26,7 @@ export function Footer({
           
           {/* Column 1: Brand & Tagline */}
           <div className="lg:col-span-4 space-y-4">
-            <h2 className="font-serif text-2xl sm:text-3xl tracking-[0.25em] font-medium text-white uppercase">
+            <h2 className="font-serif text-2xl sm:text-3xl tracking-[0.25em] font-bold text-white uppercase">
               RIWAAYAT WEAR
             </h2>
             <p className="text-xs uppercase tracking-[0.25em] text-[#D4AF37] font-semibold">
