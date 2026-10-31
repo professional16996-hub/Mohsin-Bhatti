@@ -337,6 +337,25 @@ export function AdminDashboard({
     }
   };
 
+  // Delete Category
+  const handleDeleteCategory = async (catName: string) => {
+    if (!window.confirm(`Are you sure you want to delete category "${catName}"?`)) return;
+
+    try {
+      const res = await fetch(`/api/categories/${encodeURIComponent(catName)}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error('Failed to delete category');
+      showNotice(`Category "${catName}" deleted successfully`);
+      if (selectedProductCategory === catName) setSelectedProductCategory('All');
+      fetchAllData();
+      onRefreshData();
+    } catch (err: any) {
+      showNotice(err.message || 'Error deleting category', 'error');
+    }
+  };
+
   // Save Website Content
   const handleSaveContent = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -359,11 +378,11 @@ export function AdminDashboard({
     }
   };
 
-  // Update Security Credentials
+  // Update Security Credentials (works seamlessly in unlocked mode)
   const handleUpdateCredentials = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!currentPassword) {
-      showNotice('Please enter your current password.', 'error');
+    if (!newUsername.trim() && !newPassword.trim()) {
+      showNotice('Please enter a new username or new password to save.', 'error');
       return;
     }
 
@@ -375,9 +394,9 @@ export function AdminDashboard({
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          currentPassword,
-          newUsername: newUsername || undefined,
-          newPassword: newPassword || undefined,
+          currentPassword: currentPassword.trim() || undefined,
+          newUsername: newUsername.trim() || undefined,
+          newPassword: newPassword.trim() || undefined,
         }),
       });
       const data = await res.json();
@@ -386,6 +405,7 @@ export function AdminDashboard({
       setCurrentPassword('');
       setNewUsername('');
       setNewPassword('');
+      fetchAllData();
     } catch (err: any) {
       showNotice(err.message || 'Error updating credentials', 'error');
     }
@@ -451,9 +471,26 @@ export function AdminDashboard({
   const lowStockCount = products.filter((p) => p.stockQuantity <= 5).length;
   const avgOrderValue = orders.length > 0 ? Math.round(totalRevenue / orders.length) : 0;
 
-  // Filtered Products
+  // Category Garments Counter Helper (handles special collections New Arrivals & Best Sellers)
+  const getCategoryCount = (catName: string) => {
+    if (catName === 'All') return products.length;
+    if (catName === 'New Arrivals') return products.filter((p) => Boolean(p.isNewArrival)).length;
+    if (catName === 'Best Sellers') return products.filter((p) => Boolean(p.isBestSeller)).length;
+    return products.filter((p) => p.category === catName).length;
+  };
+
+  // Filtered Products (correctly matches standard categories as well as New Arrivals and Best Sellers)
   const filteredProducts = products.filter((p) => {
-    const matchesCat = selectedProductCategory === 'All' || p.category === selectedProductCategory;
+    let matchesCat = true;
+    if (selectedProductCategory !== 'All') {
+      if (selectedProductCategory === 'New Arrivals') {
+        matchesCat = Boolean(p.isNewArrival);
+      } else if (selectedProductCategory === 'Best Sellers') {
+        matchesCat = Boolean(p.isBestSeller);
+      } else {
+        matchesCat = p.category === selectedProductCategory;
+      }
+    }
     const matchesSearch = !productSearch.trim() || 
       p.name.toLowerCase().includes(productSearch.toLowerCase()) ||
       p.category.toLowerCase().includes(productSearch.toLowerCase()) ||
@@ -956,7 +993,7 @@ export function AdminDashboard({
                       <option value="All">All Categories ({products.length})</option>
                       {categories.map((c) => (
                         <option key={c} value={c}>
-                          {c} ({products.filter((p) => p.category === c).length})
+                          {c} ({getCategoryCount(c)})
                         </option>
                       ))}
                     </select>
@@ -967,25 +1004,27 @@ export function AdminDashboard({
                 <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-1">
                   <button
                     onClick={() => setSelectedProductCategory('All')}
-                    className={`px-3 py-1 text-[11px] uppercase tracking-wider transition-colors cursor-pointer ${
+                    className={`px-3 py-1 text-[11px] uppercase tracking-wider transition-colors cursor-pointer flex items-center gap-1 ${
                       selectedProductCategory === 'All'
                         ? 'bg-[#D4AF37] text-[#121212] font-bold'
                         : 'bg-white/5 text-neutral-300 hover:text-white'
                     }`}
                   >
-                    All
+                    <span>All</span>
+                    <span className="text-[10px] opacity-75 font-mono">({products.length})</span>
                   </button>
                   {categories.map((cat) => (
                     <button
                       key={cat}
                       onClick={() => setSelectedProductCategory(cat)}
-                      className={`whitespace-nowrap px-3 py-1 text-[11px] uppercase tracking-wider transition-colors cursor-pointer ${
+                      className={`whitespace-nowrap px-3 py-1 text-[11px] uppercase tracking-wider transition-colors cursor-pointer flex items-center gap-1 ${
                         selectedProductCategory === cat
                           ? 'bg-[#D4AF37] text-[#121212] font-bold'
                           : 'bg-white/5 text-neutral-300 hover:text-white'
                       }`}
                     >
-                      {cat}
+                      <span>{cat}</span>
+                      <span className="text-[10px] opacity-75 font-mono">({getCategoryCount(cat)})</span>
                     </button>
                   ))}
                 </div>
@@ -1321,19 +1360,45 @@ export function AdminDashboard({
               </form>
 
               <div className="bg-[#171717] border border-white/10 divide-y divide-white/5">
-                {categories.map((cat, idx) => (
-                  <div key={idx} className="p-4 flex items-center justify-between text-xs">
-                    <div>
-                      <span className="font-semibold text-white">{cat}</span>
-                      <span className="text-neutral-500 block text-[11px] mt-0.5">
-                        {products.filter((p) => p.category === cat).length} active garments in this category
-                      </span>
+                {categories.map((cat, idx) => {
+                  const count = getCategoryCount(cat);
+                  const isSpecial = cat === "New Arrivals" || cat === "Best Sellers";
+                  return (
+                    <div key={idx} className="p-4 flex items-center justify-between text-xs">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold text-white text-sm">{cat}</span>
+                          {isSpecial && (
+                            <span className="text-[10px] bg-[#D4AF37]/20 text-[#D4AF37] border border-[#D4AF37]/40 px-2 py-0.5">
+                              Dynamic Collection
+                            </span>
+                          )}
+                        </div>
+                        <span className="text-neutral-400 block text-[11px] mt-1">
+                          <strong className="text-[#D4AF37]">{count}</strong> garments actively displayed in this category
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => {
+                            setSelectedProductCategory(cat);
+                            setActiveTab('products');
+                          }}
+                          className="px-3 py-1.5 text-[11px] bg-white/5 hover:bg-white/10 text-neutral-300 border border-white/10 transition-colors cursor-pointer"
+                        >
+                          View Products
+                        </button>
+                        <button
+                          onClick={() => handleDeleteCategory(cat)}
+                          className="p-1.5 text-neutral-400 hover:text-red-400 transition-colors cursor-pointer"
+                          title={`Delete category ${cat}`}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
                     </div>
-                    <span className="text-[10px] bg-white/5 px-2 py-1 text-neutral-400 border border-white/10">
-                      Standard Collection
-                    </span>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           )}
@@ -1545,15 +1610,19 @@ export function AdminDashboard({
                 </p>
               </div>
 
+              <div className="bg-[#D4AF37]/10 border border-[#D4AF37]/30 p-3.5 text-xs text-[#D4AF37] flex items-center gap-2">
+                <Shield className="w-4 h-4 shrink-0" />
+                <span>Admin Suite is currently in <strong>Unlocked Access</strong> mode per your preference. You can set your new admin username and new password anytime below without needing an old password.</span>
+              </div>
+
               <form onSubmit={handleUpdateCredentials} className="bg-[#171717] p-6 border border-white/10 space-y-4 text-xs">
                 <div>
                   <label className="block uppercase tracking-wider font-semibold text-neutral-300 mb-1">
-                    Current Master Password *
+                    Current Password (Optional in Unlocked Mode)
                   </label>
                   <input
                     type="password"
-                    required
-                    placeholder="Enter current password"
+                    placeholder="Optional (leave empty if not set)"
                     value={currentPassword}
                     onChange={(e) => setCurrentPassword(e.target.value)}
                     className="w-full px-3.5 py-2.5 bg-black/40 border border-neutral-700 text-white focus:outline-none focus:border-[#D4AF37]"
@@ -1562,7 +1631,7 @@ export function AdminDashboard({
 
                 <div>
                   <label className="block uppercase tracking-wider font-semibold text-neutral-300 mb-1">
-                    New Admin Username (Optional)
+                    New Admin Username
                   </label>
                   <input
                     type="text"
@@ -1575,11 +1644,11 @@ export function AdminDashboard({
 
                 <div>
                   <label className="block uppercase tracking-wider font-semibold text-neutral-300 mb-1">
-                    New Admin Password (Optional, min 6 characters)
+                    New Admin Password
                   </label>
                   <input
                     type="password"
-                    placeholder="Enter new secure password"
+                    placeholder="Enter new password (min 4 characters)"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     className="w-full px-3.5 py-2.5 bg-black/40 border border-neutral-700 text-white focus:outline-none focus:border-[#D4AF37]"
@@ -1590,7 +1659,7 @@ export function AdminDashboard({
                   type="submit"
                   className="px-6 py-2.5 bg-[#D4AF37] hover:bg-[#c5a059] text-[#121212] text-xs uppercase tracking-wider font-bold transition-colors cursor-pointer"
                 >
-                  Update Admin Credentials
+                  Save New Admin Credentials
                 </button>
               </form>
             </div>
@@ -1643,11 +1712,13 @@ export function AdminDashboard({
                     onChange={(e) => setProdCategory(e.target.value)}
                     className="w-full px-3.5 py-2.5 bg-black/40 border border-neutral-700 text-white focus:outline-none focus:border-[#D4AF37]"
                   >
-                    {categories.map((c) => (
-                      <option key={c} value={c}>
-                        {c}
-                      </option>
-                    ))}
+                    {categories
+                      .filter((c) => c !== "New Arrivals" && c !== "Best Sellers")
+                      .map((c) => (
+                        <option key={c} value={c}>
+                          {c}
+                        </option>
+                      ))}
                   </select>
                 </div>
 
