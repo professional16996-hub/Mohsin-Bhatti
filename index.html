@@ -3,6 +3,33 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <script>
+      // Suppress harmless Vite dev server HMR WebSocket connection errors in sandbox iframe
+      (function() {
+        var origError = console.error;
+        console.error = function() {
+          var msg = Array.prototype.join.call(arguments, ' ');
+          if (msg.includes('WebSocket') || msg.includes('websocket') || msg.includes('[vite] failed to connect')) {
+            return;
+          }
+          origError.apply(console, arguments);
+        };
+        window.addEventListener('unhandledrejection', function(e) {
+          var reason = e && (e.reason ? (e.reason.message || String(e.reason)) : '');
+          if (reason.includes('WebSocket') || reason.includes('websocket')) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+          }
+        }, true);
+        window.addEventListener('error', function(e) {
+          var msg = e && (e.message || '');
+          if (msg.includes('WebSocket') || msg.includes('websocket')) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+          }
+        }, true);
+      })();
+    </script>
     <title>RIWAAYAT WEAR | Timeless Tradition, Modern Style</title>
     <meta name="description" content="Discover premium Pakistani shalwar kameez for men and women crafted with elegance, comfort and timeless heritage." />
     <meta property="og:title" content="RIWAAYAT WEAR | Timeless Tradition, Modern Style" />
