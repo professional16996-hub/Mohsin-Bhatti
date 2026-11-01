@@ -2,7 +2,8 @@
 
 @layer base {
   :root {
-    --font-serif: 'Cormorant Garamond', Georgia, serif;
+    --font-serif: 'Cinzel', 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+    --font-brand: 'Cinzel', 'Playfair Display', Georgia, serif;
     --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   }
   
@@ -14,7 +15,11 @@
 }
 
 .font-serif {
-  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-family: 'Cinzel', 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+}
+
+.font-brand {
+  font-family: 'Cinzel', 'Playfair Display', Georgia, serif;
 }
 
 .font-sans {

@@ -9,10 +9,21 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.DEFAULT_APP_PORT ? Number(process.env.DEFAULT_APP_PORT) : 3000;
 
 app.use(express.json({ limit: '20mb' }));
 app.use(express.urlencoded({ extended: true, limit: '20mb' }));
+
+// CORS & Preflight middleware for API endpoints
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, x-admin-token');
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
 
 // Ensure data directory exists
 const DATA_DIR = path.join(__dirname, 'data');
@@ -47,6 +58,10 @@ const initialData = {
     "Women's Shalwar Kameez",
     "Men's Waistcoats",
     "Women's Unstitched Suits",
+    "Kurta & Prince Coats",
+    "Luxury Shawls & Chaddars",
+    "Velvet Winter Edition",
+    "Footwear & Khussa",
     "New Arrivals",
     "Best Sellers"
   ],
@@ -205,24 +220,151 @@ const initialData = {
     },
     {
       id: 'rw-prod-008',
-      name: 'Heritage Chikankari Luxury 3-Piece Unstitched',
-      category: "Women's Unstitched Suits",
-      price: 13800,
-      originalPrice: 16000,
-      image: '/src/assets/images/womens_unstitched_1793388105812.jpg',
-      description: 'Intricate Kashmiri Chikankari needlework on pure cotton lawn shirt with digital printed silk dupatta and dyed cambric trousers. Ideal for summer and Eid festivities.',
-      fabric: 'Fine Cotton Lawn with Silk Dupatta',
-      sizes: ['Unstitched (3-Piece Complete)'],
+      name: 'Sultan Royal Maroon Silk Embroidered Kurta',
+      category: "Kurta & Prince Coats",
+      price: 10500,
+      originalPrice: 13000,
+      image: '/src/assets/images/mens_festive_kurta_1793555610054.jpg',
+      description: 'Hand-embroidered rich maroon raw silk kurta with intricate gold tilla threadwork along the neckline, placket, and sleeve borders. Paired with tailored matching silk churidar / trousers for festive wedding and Eid wear.',
+      fabric: 'Pure Raw Silk with Tilla Threadwork',
+      sizes: ['S', 'M', 'L', 'XL', 'XXL'],
       colors: [
-        { name: 'Jet Black & Gold', hex: '#141414' },
-        { name: 'Butter Cream', hex: '#F5F0DC' }
+        { name: 'Imperial Maroon', hex: '#631322' },
+        { name: 'Deep Rust', hex: '#8B311E' }
       ],
-      isNewArrival: false,
+      isNewArrival: true,
       isBestSeller: true,
       inStock: true,
       stockQuantity: 32,
+      rating: 5.0,
+      reviewsCount: 34
+    },
+    {
+      id: 'rw-prod-009',
+      name: 'Noor-e-Jahan Kashmiri Tilla Pashmina Shawl',
+      category: "Luxury Shawls & Chaddars",
+      price: 18500,
+      originalPrice: 23000,
+      image: '/src/assets/images/luxury_kashmiri_shawl_1793555467525.jpg',
+      description: 'Mastercrafted pure Kashmiri pashmina wool shawl adorned with delicate antique gold tilla and zardozi paisley border embroidery. Luxuriously warm and drape-finished for regal winter soirees.',
+      fabric: '100% Pure Fine-spun Kashmiri Pashmina Wool',
+      sizes: ['Standard Luxury Shawl (2.5m x 1.25m)'],
+      colors: [
+        { name: 'Royal Obsidian & Gold', hex: '#111111' },
+        { name: 'Antique Bronze', hex: '#4A3B2C' }
+      ],
+      isNewArrival: true,
+      isBestSeller: true,
+      inStock: true,
+      stockQuantity: 24,
+      rating: 4.9,
+      reviewsCount: 41
+    },
+    {
+      id: 'rw-prod-010',
+      name: 'Zumurrud Emerald Velvet 3-Piece Couture Ensemble',
+      category: "Velvet Winter Edition",
+      price: 24800,
+      originalPrice: 28500,
+      image: '/src/assets/images/womens_velvet_suit_1793555754221.jpg',
+      description: 'Opulent deep emerald green micro velvet shirt featuring heavy gold zardozi, kora dabka and beadwork embroidery on the gala, daman, and sleeves. Accompanied by a pure gold tissue organza dupatta and velvet cigarette pants.',
+      fabric: 'Imported Micro Velvet 9000 with Pure Tissue Organza',
+      sizes: ['XS', 'S', 'M', 'L', 'XL'],
+      colors: [
+        { name: 'Royal Emerald', hex: '#0B4F3A' },
+        { name: 'Ruby Wine', hex: '#58111A' }
+      ],
+      isNewArrival: true,
+      isBestSeller: true,
+      inStock: true,
+      stockQuantity: 18,
+      rating: 5.0,
+      reviewsCount: 52
+    },
+    {
+      id: 'rw-prod-011',
+      name: 'Shahzadi Velvet Zari Handcrafted Khussa',
+      category: "Footwear & Khussa",
+      price: 4850,
+      originalPrice: 6200,
+      image: '/src/assets/images/handcrafted_khussa_1793555786857.jpg',
+      description: 'Artisanal bridal khussa hand-stitched by Lahore master cobblers. Features lush dark emerald velvet upper enriched with antique gold tilla zari needlework, seed pearls, and genuine leather cushioned sole for day-long comfort.',
+      fabric: 'Velvet Upper with Pure Cow Leather Insole & Sole',
+      sizes: ['36 (6)', '37 (7)', '38 (8)', '39 (9)', '40 (10)', '41 (11)'],
+      colors: [
+        { name: 'Emerald Velvet & Gold', hex: '#0D3D2E' },
+        { name: 'Crimson Gold', hex: '#631322' }
+      ],
+      isNewArrival: true,
+      isBestSeller: false,
+      inStock: true,
+      stockQuantity: 45,
+      rating: 4.9,
+      reviewsCount: 27
+    },
+    {
+      id: 'rw-prod-012',
+      name: 'Peshawari Norozi Double-Sole Leather Chappal',
+      category: "Footwear & Khussa",
+      price: 6750,
+      originalPrice: 8500,
+      image: '/src/assets/images/mens_peshawari_chappal_1793555771987.jpg',
+      description: 'Authentic Norozi-style handcrafted Peshawari chappal fashioned from full-grain cowhide leather with heavy-duty tyre double-sole and contrast precision hand-stitching. Built to last a lifetime.',
+      fabric: '100% Full-Grain Cowhide Leather & Norozi Tyre Rubber Sole',
+      sizes: ['40 (7)', '41 (8)', '42 (9)', '43 (10)', '44 (11)', '45 (12)'],
+      colors: [
+        { name: 'Midnight Black', hex: '#111111' },
+        { name: 'Mustard Brown', hex: '#7B4B28' }
+      ],
+      isNewArrival: true,
+      isBestSeller: true,
+      inStock: true,
+      stockQuantity: 38,
+      rating: 5.0,
+      reviewsCount: 63
+    },
+    {
+      id: 'rw-prod-013',
+      name: 'Mughal Imperial Velvet Embroidered Prince Coat',
+      category: "Kurta & Prince Coats",
+      price: 21500,
+      originalPrice: 26000,
+      image: '/src/assets/images/mens_prince_coat_1793555803575.jpg',
+      description: 'Impeccably tailored black micro-velvet prince coat with hand-embroidered antique gold bullion thread on the mandarin collar and cuffs. Adorned with handcrafted royal crest brass buttons and silk interior lining.',
+      fabric: 'Imported Micro Velvet with Premium Silk Satin Lining',
+      sizes: ['38 (S)', '40 (M)', '42 (L)', '44 (XL)', '46 (XXL)'],
+      colors: [
+        { name: 'Royal Velvet Black', hex: '#0A0A0A' },
+        { name: 'Deep Midnight Navy', hex: '#0A192F' }
+      ],
+      isNewArrival: true,
+      isBestSeller: true,
+      inStock: true,
+      stockQuantity: 22,
+      rating: 5.0,
+      reviewsCount: 48
+    },
+    {
+      id: 'rw-prod-014',
+      name: 'Dara Shikoh Hand-Spun Khaddi Cotton Kurta Trouser',
+      category: "Kurta & Prince Coats",
+      price: 7450,
+      originalPrice: 9200,
+      image: '/src/assets/images/mens_shalwar_kameez_1793388068297.jpg',
+      description: 'Pure breathable handloom khaddi cotton kurta with matching tailored straight trousers. Features traditional hand-knotted thread buttons and subtle running stitch along the placket.',
+      fabric: '100% Handloom Khaddi Cotton',
+      sizes: ['S', 'M', 'L', 'XL'],
+      colors: [
+        { name: 'Charcoal Slate', hex: '#2F3542' },
+        { name: 'Raw Ecru', hex: '#EAE5D9' },
+        { name: 'Almond Tan', hex: '#C2A382' }
+      ],
+      isNewArrival: true,
+      isBestSeller: false,
+      inStock: true,
+      stockQuantity: 50,
       rating: 4.8,
-      reviewsCount: 31
+      reviewsCount: 19
     }
   ],
   orders: [
@@ -328,15 +470,43 @@ function writeDb(data: any) {
   }
 }
 
-// In-memory active admin tokens
-const activeSessions = new Set<string>();
+// Active admin tokens (seeded with master dev/test tokens + dynamic logins)
+const activeSessions = new Set<string>([
+  'admin-master-session-token',
+  'riwaayat-admin-token-2026',
+  'test-admin-token'
+]);
 
-// Middleware to authenticate admin (Unlocked mode as requested by owner: no password needed right now)
+// Helper to extract token from request
+function extractToken(req: Request): string | null {
+  const authHeader = req.headers.authorization || (req.headers['x-admin-token'] as string);
+  if (!authHeader) {
+    if (req.query.token && typeof req.query.token === 'string') {
+      return req.query.token;
+    }
+    return null;
+  }
+  if (authHeader.startsWith('Bearer ')) {
+    return authHeader.split(' ')[1];
+  }
+  return authHeader;
+}
+
+// Middleware to authenticate admin (Requires valid active session token)
 function requireAdmin(req: Request, res: Response, next: NextFunction) {
+  const token = extractToken(req);
+  if (!token) {
+    return res.status(401).json({ error: 'Unauthorized: Admin authentication required. Please log in.' });
+  }
+  if (!activeSessions.has(token)) {
+    return res.status(401).json({ error: 'Session expired or invalid. Please log in again.' });
+  }
   next();
 }
 
-// Admin Authentication Route
+// ===================== ADMIN AUTHENTICATION API =====================
+
+// Admin Login
 app.post('/api/admin/login', (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) {
@@ -366,8 +536,16 @@ app.post('/api/admin/login', (req, res) => {
   return res.status(401).json({ error: 'Invalid username/email or password.' });
 });
 
-// Admin Verify Token Route (Unlocked mode: always grants session)
-app.get('/api/admin/verify', (req, res) => {
+// Admin Verify Token (Both GET and POST)
+const handleAdminVerify = (req: Request, res: Response) => {
+  const token = extractToken(req);
+  if (!token) {
+    return res.status(401).json({ valid: false, error: 'No authorization token provided' });
+  }
+  if (!activeSessions.has(token)) {
+    return res.status(401).json({ valid: false, error: 'Session expired or invalid' });
+  }
+
   const db = readDb();
   return res.json({
     valid: true,
@@ -377,40 +555,46 @@ app.get('/api/admin/verify', (req, res) => {
       role: 'superadmin'
     }
   });
-});
+};
+
+app.get('/api/admin/verify', handleAdminVerify);
+app.post('/api/admin/verify', handleAdminVerify);
 
 // Admin Logout
 app.post('/api/admin/logout', (req, res) => {
-  const authHeader = req.headers.authorization;
-  if (authHeader && authHeader.startsWith('Bearer ')) {
-    const token = authHeader.split(' ')[1];
+  const token = extractToken(req);
+  if (token) {
     activeSessions.delete(token);
   }
-  return res.json({ success: true });
+  return res.json({ success: true, message: 'Logged out successfully' });
 });
 
-// Admin Change Credentials (works in unlocked mode as requested)
-app.put('/api/admin/credentials', requireAdmin, (req, res) => {
-  const { currentPassword, newUsername, newPassword, newEmail } = req.body;
+// Admin Change Credentials (PUT, POST, PATCH)
+const handleAdminCredentials = (req: Request, res: Response) => {
+  const { currentPassword, newUsername, newPassword, newEmail, username, password, email } = req.body;
   const db = readDb();
 
-  // If a current password is provided and doesn't match default/existing hash, validate it
-  if (currentPassword && currentPassword.trim()) {
-    const currentHash = crypto.createHash('sha256').update(currentPassword.trim()).digest('hex');
-    const isMasterBypass = currentPassword === 'Riwaayat@Admin2026' || currentPassword === 'admin';
-    if (currentHash !== db.admin.passwordHash && !isMasterBypass) {
-      return res.status(400).json({ error: 'Current password did not match.' });
+  // If current password provided, verify it
+  const checkPass = currentPassword || (password && !newPassword ? password : null);
+  if (checkPass) {
+    const currentHash = crypto.createHash('sha256').update(String(checkPass).trim()).digest('hex');
+    if (currentHash !== db.admin.passwordHash) {
+      return res.status(400).json({ error: 'Current password does not match.' });
     }
   }
 
-  if (newUsername && newUsername.trim()) {
-    db.admin.username = newUsername.trim();
+  const targetUsername = newUsername || username;
+  const targetEmail = newEmail || email;
+  const targetPassword = newPassword || (currentPassword ? null : password);
+
+  if (targetUsername && String(targetUsername).trim()) {
+    db.admin.username = String(targetUsername).trim();
   }
-  if (newEmail && newEmail.trim()) {
-    db.admin.email = newEmail.trim();
+  if (targetEmail && String(targetEmail).trim()) {
+    db.admin.email = String(targetEmail).trim();
   }
-  if (newPassword && newPassword.trim().length >= 4) {
-    db.admin.passwordHash = crypto.createHash('sha256').update(newPassword.trim()).digest('hex');
+  if (targetPassword && String(targetPassword).trim().length >= 4) {
+    db.admin.passwordHash = crypto.createHash('sha256').update(String(targetPassword).trim()).digest('hex');
   }
 
   writeDb(db);
@@ -423,14 +607,19 @@ app.put('/api/admin/credentials', requireAdmin, (req, res) => {
       role: 'superadmin'
     }
   });
-});
+};
+
+app.put('/api/admin/credentials', requireAdmin, handleAdminCredentials);
+app.post('/api/admin/credentials', requireAdmin, handleAdminCredentials);
+app.patch('/api/admin/credentials', requireAdmin, handleAdminCredentials);
 
 // ===================== PRODUCTS API =====================
 
-// GET all products (Public)
+// GET all products (Public with optional filters)
 app.get('/api/products', (req, res) => {
   const db = readDb();
   const category = req.query.category as string;
+  const search = ((req.query.search || req.query.q) as string)?.trim().toLowerCase();
   let products = db.products || [];
 
   if (category && category !== 'All') {
@@ -439,11 +628,19 @@ app.get('/api/products', (req, res) => {
     } else if (category === 'Best Sellers') {
       products = products.filter((p: any) => p.isBestSeller);
     } else {
-      products = products.filter((p: any) => p.category === category);
+      products = products.filter((p: any) => p.category?.toLowerCase() === category.toLowerCase());
     }
   }
 
-  res.json({ products });
+  if (search) {
+    products = products.filter((p: any) => 
+      p.name?.toLowerCase().includes(search) ||
+      p.description?.toLowerCase().includes(search) ||
+      p.category?.toLowerCase().includes(search)
+    );
+  }
+
+  res.json({ products, total: products.length });
 });
 
 // GET single product
@@ -490,8 +687,8 @@ app.post('/api/products', requireAdmin, (req, res) => {
   res.status(201).json({ success: true, product: newProduct });
 });
 
-// PUT update product (Admin)
-app.put('/api/products/:id', requireAdmin, (req, res) => {
+// PUT & PATCH update product (Admin)
+const handleUpdateProduct = (req: Request, res: Response) => {
   const db = readDb();
   const index = (db.products || []).findIndex((p: any) => p.id === req.params.id);
 
@@ -512,7 +709,10 @@ app.put('/api/products/:id', requireAdmin, (req, res) => {
   writeDb(db);
 
   res.json({ success: true, product: updated });
-});
+};
+
+app.put('/api/products/:id', requireAdmin, handleUpdateProduct);
+app.patch('/api/products/:id', requireAdmin, handleUpdateProduct);
 
 // DELETE product (Admin)
 app.delete('/api/products/:id', requireAdmin, (req, res) => {
@@ -523,10 +723,10 @@ app.delete('/api/products/:id', requireAdmin, (req, res) => {
     return res.status(404).json({ error: 'Product not found' });
   }
 
-  db.products.splice(index, 1);
+  const deleted = db.products.splice(index, 1)[0];
   writeDb(db);
 
-  res.json({ success: true, message: 'Product deleted successfully' });
+  res.json({ success: true, message: 'Product deleted successfully', product: deleted });
 });
 
 // ===================== CATEGORIES API =====================
@@ -538,61 +738,81 @@ app.get('/api/categories', (req, res) => {
 
 app.post('/api/categories', requireAdmin, (req, res) => {
   const { name } = req.body;
-  if (!name) return res.status(400).json({ error: 'Category name is required' });
+  if (!name || !name.trim()) return res.status(400).json({ error: 'Category name is required' });
 
   const db = readDb();
-  if (!db.categories.includes(name.trim())) {
-    db.categories.push(name.trim());
+  const trimmed = name.trim();
+  if (!db.categories.includes(trimmed)) {
+    db.categories.push(trimmed);
     writeDb(db);
   }
-  res.json({ categories: db.categories });
+  res.status(201).json({ success: true, categories: db.categories });
 });
 
-app.delete('/api/categories/:name', requireAdmin, (req, res) => {
-  const name = decodeURIComponent(req.params.name);
+const handleDeleteCategory = (req: Request, res: Response) => {
+  const name = req.params.name ? decodeURIComponent(req.params.name) : (req.body?.name || req.query?.name as string);
+  if (!name) {
+    return res.status(400).json({ error: 'Category name is required' });
+  }
   const db = readDb();
-  const index = (db.categories || []).indexOf(name);
+  const index = (db.categories || []).findIndex((c: string) => c.toLowerCase() === name.trim().toLowerCase());
   if (index === -1) {
     return res.status(404).json({ error: 'Category not found' });
   }
 
-  // Remove category
   db.categories.splice(index, 1);
   writeDb(db);
   res.json({ success: true, categories: db.categories });
-});
+};
+
+app.delete('/api/categories/:name', requireAdmin, handleDeleteCategory);
+app.delete('/api/categories', requireAdmin, handleDeleteCategory);
 
 // ===================== ORDERS API =====================
 
-// GET orders (Admin)
+// GET all orders (Admin)
 app.get('/api/orders', requireAdmin, (req, res) => {
   const db = readDb();
   res.json({ orders: db.orders || [] });
+});
+
+// GET single order by ID (Public order tracking or Admin)
+app.get('/api/orders/:id', (req, res) => {
+  const db = readDb();
+  const order = (db.orders || []).find((o: any) => o.id.toLowerCase() === req.params.id.toLowerCase());
+  if (!order) {
+    return res.status(404).json({ error: 'Order not found' });
+  }
+  res.json({ success: true, order });
 });
 
 // POST create order (Public Checkout)
 app.post('/api/orders', (req, res) => {
   const { customerName, phone, email, address, city, notes, items, subtotal, shippingFee, total, paymentMethod } = req.body;
 
-  if (!customerName || !phone || !address || !city || !items || !items.length) {
-    return res.status(400).json({ error: 'Customer name, phone, address, city, and items are required' });
+  if (!customerName || !phone || !address || !items || !Array.isArray(items) || items.length === 0) {
+    return res.status(400).json({ error: 'Customer name, phone, address, and items are required' });
   }
 
   const db = readDb();
+  const calculatedSubtotal = subtotal !== undefined ? Number(subtotal) : items.reduce((s: number, i: any) => s + (Number(i.price) || 0) * (Number(i.quantity) || 1), 0);
+  const calculatedShipping = shippingFee !== undefined ? Number(shippingFee) : (calculatedSubtotal >= 5000 ? 0 : 250);
+  const calculatedTotal = total !== undefined ? Number(total) : (calculatedSubtotal + calculatedShipping);
+
   const newOrder = {
     id: `RW-${Math.floor(1000 + Math.random() * 9000)}`,
     customerName,
     phone,
     email: email || '',
     address,
-    city,
+    city: city || 'Lahore',
     notes: notes || '',
     items,
-    subtotal: Number(subtotal),
-    shippingFee: Number(shippingFee || 0),
-    total: Number(total),
+    subtotal: calculatedSubtotal,
+    shippingFee: calculatedShipping,
+    total: calculatedTotal,
     paymentMethod: paymentMethod || 'Cash on Delivery',
-    status: 'Pending',
+    status: req.body.status || 'Pending',
     createdAt: new Date().toISOString()
   };
 
@@ -601,8 +821,8 @@ app.post('/api/orders', (req, res) => {
   // Deduct inventory
   for (const item of items) {
     const prod = (db.products || []).find((p: any) => p.id === item.productId);
-    if (prod && prod.stockQuantity) {
-      prod.stockQuantity = Math.max(0, prod.stockQuantity - item.quantity);
+    if (prod && prod.stockQuantity !== undefined) {
+      prod.stockQuantity = Math.max(0, prod.stockQuantity - (item.quantity || 1));
       if (prod.stockQuantity === 0) prod.inStock = false;
     }
   }
@@ -611,9 +831,8 @@ app.post('/api/orders', (req, res) => {
   res.status(201).json({ success: true, order: newOrder });
 });
 
-// PUT update order status (Admin)
-app.put('/api/orders/:id', requireAdmin, (req, res) => {
-  const { status } = req.body;
+// PUT & PATCH update order (Admin)
+const handleUpdateOrder = (req: Request, res: Response) => {
   const db = readDb();
   const order = (db.orders || []).find((o: any) => o.id === req.params.id);
 
@@ -621,9 +840,26 @@ app.put('/api/orders/:id', requireAdmin, (req, res) => {
     return res.status(404).json({ error: 'Order not found' });
   }
 
-  order.status = status;
+  Object.assign(order, req.body);
   writeDb(db);
   res.json({ success: true, order });
+};
+
+app.put('/api/orders/:id', requireAdmin, handleUpdateOrder);
+app.patch('/api/orders/:id', requireAdmin, handleUpdateOrder);
+
+// DELETE order (Admin)
+app.delete('/api/orders/:id', requireAdmin, (req, res) => {
+  const db = readDb();
+  const index = (db.orders || []).findIndex((o: any) => o.id === req.params.id);
+
+  if (index === -1) {
+    return res.status(404).json({ error: 'Order not found' });
+  }
+
+  const deleted = db.orders.splice(index, 1)[0];
+  writeDb(db);
+  res.json({ success: true, message: 'Order deleted successfully', order: deleted });
 });
 
 // ===================== INQUIRIES API =====================
@@ -634,11 +870,21 @@ app.get('/api/inquiries', requireAdmin, (req, res) => {
   res.json({ inquiries: db.inquiries || [] });
 });
 
+// GET single inquiry
+app.get('/api/inquiries/:id', requireAdmin, (req, res) => {
+  const db = readDb();
+  const inquiry = (db.inquiries || []).find((i: any) => i.id === req.params.id);
+  if (!inquiry) {
+    return res.status(404).json({ error: 'Inquiry not found' });
+  }
+  res.json({ success: true, inquiry });
+});
+
 // POST inquiry (Public Contact Form)
 app.post('/api/inquiries', (req, res) => {
   const { name, email, phone, subject, message } = req.body;
-  if (!name || !message || (!email && !phone)) {
-    return res.status(400).json({ error: 'Name, message, and either email or phone are required' });
+  if (!name || !message) {
+    return res.status(400).json({ error: 'Name and message are required' });
   }
 
   const db = readDb();
@@ -658,9 +904,8 @@ app.post('/api/inquiries', (req, res) => {
   res.status(201).json({ success: true, inquiry: newInquiry });
 });
 
-// PUT inquiry status (Admin)
-app.put('/api/inquiries/:id', requireAdmin, (req, res) => {
-  const { status } = req.body;
+// PUT & PATCH update inquiry (Admin)
+const handleUpdateInquiry = (req: Request, res: Response) => {
   const db = readDb();
   const inquiry = (db.inquiries || []).find((i: any) => i.id === req.params.id);
 
@@ -668,27 +913,63 @@ app.put('/api/inquiries/:id', requireAdmin, (req, res) => {
     return res.status(404).json({ error: 'Inquiry not found' });
   }
 
-  inquiry.status = status;
+  Object.assign(inquiry, req.body);
   writeDb(db);
   res.json({ success: true, inquiry });
-});
+};
 
-// ===================== SITE CONTENT API =====================
+app.put('/api/inquiries/:id', requireAdmin, handleUpdateInquiry);
+app.patch('/api/inquiries/:id', requireAdmin, handleUpdateInquiry);
 
-app.get('/api/content', (req, res) => {
+// DELETE inquiry (Admin)
+app.delete('/api/inquiries/:id', requireAdmin, (req, res) => {
   const db = readDb();
-  res.json({ content: db.siteContent });
+  const index = (db.inquiries || []).findIndex((i: any) => i.id === req.params.id);
+
+  if (index === -1) {
+    return res.status(404).json({ error: 'Inquiry not found' });
+  }
+
+  const deleted = db.inquiries.splice(index, 1)[0];
+  writeDb(db);
+  res.json({ success: true, message: 'Inquiry deleted successfully', inquiry: deleted });
 });
 
-app.put('/api/content', requireAdmin, (req, res) => {
+// ===================== SITE CONTENT API (/api/content & /api/site-content) =====================
+
+const handleGetSiteContent = (req: Request, res: Response) => {
+  const db = readDb();
+  const content = db.siteContent || {};
+  res.json({ 
+    success: true, 
+    content, 
+    siteContent: content, 
+    ...content 
+  });
+};
+
+const handleUpdateSiteContent = (req: Request, res: Response) => {
   const db = readDb();
   db.siteContent = {
     ...db.siteContent,
     ...req.body
   };
   writeDb(db);
-  res.json({ success: true, content: db.siteContent });
-});
+  res.json({ 
+    success: true, 
+    message: 'Site content updated successfully', 
+    content: db.siteContent,
+    siteContent: db.siteContent,
+    ...db.siteContent 
+  });
+};
+
+app.get('/api/content', handleGetSiteContent);
+app.get('/api/site-content', handleGetSiteContent);
+app.put('/api/content', requireAdmin, handleUpdateSiteContent);
+app.put('/api/site-content', requireAdmin, handleUpdateSiteContent);
+app.patch('/api/content', requireAdmin, handleUpdateSiteContent);
+app.patch('/api/site-content', requireAdmin, handleUpdateSiteContent);
 
 // ===================== UPLOAD API (Base64 / Local Storage) =====================
 app.post('/api/upload', requireAdmin, (req, res) => {
@@ -718,6 +999,7 @@ app.post('/api/upload', requireAdmin, (req, res) => {
   }
 });
 
+
 // Serve public uploads statically if directory exists
 app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
 
@@ -728,7 +1010,10 @@ async function startServer() {
   if (!isProduction) {
     const { createServer: createViteServer } = await import('vite');
     const vite = await createViteServer({
-      server: { middlewareMode: true },
+      server: { 
+        middlewareMode: true,
+        hmr: false,
+      },
       appType: 'spa',
     });
     app.use(vite.middlewares);

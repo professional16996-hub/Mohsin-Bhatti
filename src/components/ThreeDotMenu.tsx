@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MoreVertical, Shield, FileText, Phone, Info, X } from 'lucide-react';
+import { MoreVertical, Shield, FileText, Phone, Info, X, Lock } from 'lucide-react';
 
 interface ThreeDotMenuProps {
   onOpenAbout: () => void;
@@ -7,6 +7,7 @@ interface ThreeDotMenuProps {
   onOpenPrivacy: () => void;
   onOpenAdmin: () => void;
   isAdminLoggedIn?: boolean;
+  align?: 'left' | 'right';
 }
 
 export function ThreeDotMenu({
@@ -15,6 +16,7 @@ export function ThreeDotMenu({
   onOpenPrivacy,
   onOpenAdmin,
   isAdminLoggedIn = false,
+  align = 'right',
 }: ThreeDotMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -67,7 +69,7 @@ export function ThreeDotMenu({
 
         {isOpen && (
           <div 
-            className="absolute left-0 mt-2 w-72 origin-top-left bg-[#121212] text-white shadow-2xl border-2 border-[#D4AF37]/50 py-2 z-50 animate-in fade-in zoom-in-95 duration-150"
+            className={`absolute ${align === 'left' ? 'left-0 origin-top-left' : 'right-0 origin-top-right'} mt-2 w-72 bg-[#121212] text-white shadow-2xl border-2 border-[#D4AF37]/50 py-2 z-50 animate-in fade-in zoom-in-95 duration-150`}
             role="menu"
           >
             <div className="px-4 py-2.5 border-b border-white/10 flex items-center justify-between">
@@ -139,9 +141,17 @@ export function ThreeDotMenu({
                   <Shield className="w-4 h-4 text-[#D4AF37]" />
                   <span className="font-bold">Admin Panel</span>
                 </div>
-                <span className="text-[10px] bg-[#25D366]/20 text-[#25D366] border border-[#25D366]/40 px-2 py-0.5 text-xs font-mono font-bold">
-                  Unlocked
-                </span>
+                {isAdminLoggedIn ? (
+                  <span className="text-[10px] bg-emerald-950/80 text-emerald-300 border border-emerald-600/50 px-2 py-0.5 text-xs font-mono font-semibold flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    Active
+                  </span>
+                ) : (
+                  <span className="text-[10px] bg-amber-950/80 text-[#D4AF37] border border-[#D4AF37]/60 px-2 py-0.5 text-xs font-mono font-semibold flex items-center gap-1">
+                    <Lock className="w-3 h-3 text-[#D4AF37]" />
+                    Locked
+                  </span>
+                )}
               </button>
             </div>
           </div>

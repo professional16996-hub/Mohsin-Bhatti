@@ -8,6 +8,7 @@ import {
   FileEdit, 
   Shield, 
   LogOut, 
+  Lock,
   Plus, 
   Edit3, 
   Trash2, 
@@ -49,6 +50,12 @@ const PRESET_IMAGES = [
   { label: "Women's Ivory Shalwar Kameez", url: '/src/assets/images/womens_shalwar_kameez_1793388080478.jpg' },
   { label: "Men's Jamawar Waistcoat", url: '/src/assets/images/mens_waistcoat_1793388092885.jpg' },
   { label: "Women's Unstitched Ensemble", url: '/src/assets/images/womens_unstitched_1793388105812.jpg' },
+  { label: "Men's Festive Embroidered Kurta", url: '/src/assets/images/mens_festive_kurta_1793555610054.jpg' },
+  { label: "Luxury Kashmiri Pashmina Shawl", url: '/src/assets/images/luxury_kashmiri_shawl_1793555467525.jpg' },
+  { label: "Women's Royal Velvet Suit", url: '/src/assets/images/womens_velvet_suit_1793555754221.jpg' },
+  { label: "Peshawari Norozi Leather Chappal", url: '/src/assets/images/mens_peshawari_chappal_1793555771987.jpg' },
+  { label: "Shahzadi Handcrafted Velvet Khussa", url: '/src/assets/images/handcrafted_khussa_1793555786857.jpg' },
+  { label: "Mughal Velvet Prince Coat", url: '/src/assets/images/mens_prince_coat_1793555803575.jpg' },
   { label: "Editorial Couple Campaign", url: '/src/assets/images/riwaayat_hero_models_1793388054232.jpg' },
 ];
 
@@ -530,7 +537,7 @@ export function AdminDashboard({
           <div className="hidden md:block border-l border-white/15 h-5" />
 
           <div className="flex items-center gap-2.5">
-            <h1 className="font-serif text-lg tracking-[0.2em] uppercase font-bold text-white">
+            <h1 className="font-brand text-lg tracking-normal uppercase font-black text-white">
               RIWAAYAT WEAR
             </h1>
             <span className="bg-[#D4AF37]/20 text-[#D4AF37] border border-[#D4AF37]/40 text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-none font-mono">
@@ -554,6 +561,15 @@ export function AdminDashboard({
             <span className="font-mono text-[11px] text-[#D4AF37]">{adminUser?.username || 'admin'}</span>
             <span className="text-[10px] text-neutral-400">· Lahore Time: PKT</span>
           </div>
+
+          <button
+            onClick={onLogout}
+            className="flex items-center gap-1.5 text-xs text-amber-200 hover:text-white transition-colors bg-[#D4AF37]/20 hover:bg-[#D4AF37]/30 px-3 py-1.5 border border-[#D4AF37]/50 cursor-pointer"
+            title="Lock Admin Panel and Sign Out"
+          >
+            <Lock className="w-3.5 h-3.5 text-[#D4AF37]" />
+            <span className="hidden sm:inline">Lock Panel</span>
+          </button>
 
           <button
             onClick={onClose}
@@ -730,15 +746,28 @@ export function AdminDashboard({
             </div>
           </div>
 
-          {/* Database & Atelier Info */}
-          <div className="p-4 border-t border-white/10 bg-black/30 text-[11px] text-neutral-400 space-y-1">
-            <div className="flex items-center justify-between">
-              <span>Database File:</span>
-              <span className="font-mono text-emerald-400">riwaayat_db.json</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span>Status:</span>
-              <span className="text-[#D4AF37] font-semibold">Active & Persistent</span>
+          {/* Database & Atelier Info & Lock Action */}
+          <div className="p-4 border-t border-white/10 space-y-2.5">
+            <button
+              onClick={onLogout}
+              className="w-full py-2.5 px-3 bg-red-950/40 hover:bg-red-900/60 border border-red-700/50 text-red-200 text-xs flex items-center justify-center gap-2 cursor-pointer transition-colors"
+              title="Lock Admin Panel and Sign Out"
+            >
+              <Lock className="w-3.5 h-3.5 text-red-400" />
+              <span className="font-semibold uppercase tracking-wider text-[11px]">Lock Admin Panel</span>
+            </button>
+
+            <div className="bg-black/30 p-2.5 text-[11px] text-neutral-400 space-y-1 border border-white/5">
+              <div className="flex items-center justify-between">
+                <span>Database:</span>
+                <span className="font-mono text-emerald-400">riwaayat_db.json</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span>Access:</span>
+                <span className="text-[#D4AF37] font-semibold flex items-center gap-1">
+                  <Lock className="w-3 h-3 text-[#D4AF37]" /> Locked & Protected
+                </span>
+              </div>
             </div>
           </div>
         </aside>
@@ -1612,17 +1641,18 @@ export function AdminDashboard({
 
               <div className="bg-[#D4AF37]/10 border border-[#D4AF37]/30 p-3.5 text-xs text-[#D4AF37] flex items-center gap-2">
                 <Shield className="w-4 h-4 shrink-0" />
-                <span>Admin Suite is currently in <strong>Unlocked Access</strong> mode per your preference. You can set your new admin username and new password anytime below without needing an old password.</span>
+                <span>The Admin Suite is <strong>Locked & Protected</strong>. Enter your current password below to update your administrative username or password.</span>
               </div>
 
               <form onSubmit={handleUpdateCredentials} className="bg-[#171717] p-6 border border-white/10 space-y-4 text-xs">
                 <div>
                   <label className="block uppercase tracking-wider font-semibold text-neutral-300 mb-1">
-                    Current Password (Optional in Unlocked Mode)
+                    Current Password (Required)
                   </label>
                   <input
                     type="password"
-                    placeholder="Optional (leave empty if not set)"
+                    required
+                    placeholder="Enter current admin password"
                     value={currentPassword}
                     onChange={(e) => setCurrentPassword(e.target.value)}
                     className="w-full px-3.5 py-2.5 bg-black/40 border border-neutral-700 text-white focus:outline-none focus:border-[#D4AF37]"
@@ -1930,7 +1960,7 @@ export function AdminDashboard({
             {/* Invoice Header */}
             <div className="flex justify-between items-start">
               <div>
-                <h2 className="font-serif text-2xl font-bold tracking-wider uppercase text-[#121212]">
+                <h2 className="font-brand text-2xl font-black tracking-normal uppercase text-black">
                   RIWAAYAT WEAR
                 </h2>
                 <p className="text-[10px] uppercase tracking-widest text-neutral-500 font-semibold">

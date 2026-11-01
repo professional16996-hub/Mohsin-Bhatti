@@ -28,6 +28,10 @@ export default function App() {
     "Women's Shalwar Kameez",
     "Men's Waistcoats",
     "Women's Unstitched Suits",
+    "Kurta & Prince Coats",
+    "Luxury Shawls & Chaddars",
+    "Velvet Winter Edition",
+    "Footwear & Khussa",
     "New Arrivals",
     "Best Sellers",
   ]);
@@ -54,9 +58,15 @@ export default function App() {
   // Informational Modals
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
 
-  // Admin Panel State (Unlocked: Direct Access as requested)
-  const [adminToken, setAdminToken] = useState<string>('rw-unlocked-master-token');
-  const [adminUser, setAdminUser] = useState<any>({ username: 'admin', role: 'superadmin' });
+  // Admin Panel State (Locked & Protected: requires authentication)
+  const [adminToken, setAdminToken] = useState<string | null>(() => {
+    try {
+      return sessionStorage.getItem('rw_admin_token') || localStorage.getItem('rw_admin_token') || null;
+    } catch {
+      return null;
+    }
+  });
+  const [adminUser, setAdminUser] = useState<any>(null);
   const [isAdminLoginOpen, setIsAdminLoginOpen] = useState(false);
   const [isAdminDashboardOpen, setIsAdminDashboardOpen] = useState(false);
 
@@ -98,17 +108,37 @@ export default function App() {
     }
   };
 
-  // Admin auto-granted in unlocked mode
+  // Verify stored session token on load
   useEffect(() => {
     loadData();
-    fetch('/api/admin/verify', {
-      headers: { Authorization: `Bearer rw-unlocked-master-token` },
-    })
-      .then((r) => r.json())
-      .then((data) => {
-        if (data.user) setAdminUser(data.user);
+    const storedToken = sessionStorage.getItem('rw_admin_token') || localStorage.getItem('rw_admin_token');
+    if (storedToken) {
+      fetch('/api/admin/verify', {
+        headers: { Authorization: `Bearer ${storedToken}` },
       })
-      .catch(() => {});
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.valid && data.user) {
+            setAdminToken(storedToken);
+            setAdminUser(data.user);
+          } else {
+            // Invalid or expired token: lock admin panel
+            sessionStorage.removeItem('rw_admin_token');
+            localStorage.removeItem('rw_admin_token');
+            setAdminToken(null);
+            setAdminUser(null);
+          }
+        })
+        .catch(() => {
+          sessionStorage.removeItem('rw_admin_token');
+          localStorage.removeItem('rw_admin_token');
+          setAdminToken(null);
+          setAdminUser(null);
+        });
+    } else {
+      setAdminToken(null);
+      setAdminUser(null);
+    }
   }, []);
 
   // Cart operations
@@ -159,21 +189,50 @@ export default function App() {
     setCartItems([]);
   };
 
-  // Admin Handlers - DIRECT UNLOCKED ACCESS
+  // Admin Handlers - PROTECTED & LOCKED
   const handleOpenAdmin = () => {
-    setIsAdminDashboardOpen(true);
+    if (adminToken && adminUser) {
+      setIsAdminDashboardOpen(true);
+    } else {
+      setIsAdminLoginOpen(true);
+    }
   };
 
   const handleAdminLoginSuccess = (token: string, user: any) => {
     setAdminToken(token);
     setAdminUser(user);
+    try {
+      sessionStorage.setItem('rw_admin_token', token);
+      localStorage.setItem('rw_admin_token', token);
+    } catch (e) {
+      console.error(e);
+    }
+    setIsAdminLoginOpen(false);
     setIsAdminDashboardOpen(true);
-    showToast('Signed in to Admin Suite successfully');
+    showToast(`Admin Suite unlocked. Welcome, ${user?.username || 'Administrator'}`);
   };
 
-  const handleAdminLogout = () => {
+  const handleAdminLogout = async () => {
+    try {
+      if (adminToken) {
+        await fetch('/api/admin/logout', {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${adminToken}` },
+        });
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    try {
+      sessionStorage.removeItem('rw_admin_token');
+      localStorage.removeItem('rw_admin_token');
+    } catch (e) {
+      console.error(e);
+    }
+    setAdminToken(null);
+    setAdminUser(null);
     setIsAdminDashboardOpen(false);
-    showToast('Returned to Storefront');
+    showToast('Admin Panel locked. Logged out successfully.');
   };
 
   // Navigation scroll helpers

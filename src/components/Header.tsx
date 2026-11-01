@@ -43,27 +43,21 @@ export function Header({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20 sm:h-24">
           
-          {/* Left: Minimal Three-Dot Menu (⋮) */}
-          <div className="flex items-center gap-2 w-1/4 justify-start">
-            <ThreeDotMenu
-              onOpenAbout={onOpenAbout}
-              onOpenContact={onOpenContact}
-              onOpenPrivacy={onOpenPrivacy}
-              onOpenAdmin={onOpenAdmin}
-              isAdminLoggedIn={isAdminLoggedIn}
-            />
+          {/* Left: Search Bar/Icon (Positioned far to the left, distanced from the website name) */}
+          <div className="flex items-center justify-start w-16 sm:w-1/4">
             <button
               onClick={() => setShowSearch(!showSearch)}
-              className="p-2 rounded-full hover:bg-[#121212]/5 text-[#121212]/70 hover:text-[#121212] transition-colors"
+              className="p-2 sm:p-2.5 rounded-full hover:bg-[#121212]/5 text-[#121212] transition-colors flex items-center gap-2 group"
               aria-label="Search Collection"
               title="Search Collection"
             >
-              <Search className="w-5 h-5" />
+              <Search className="w-5 h-5 text-[#121212] group-hover:text-[#997B2C] transition-colors" />
+              <span className="hidden md:inline text-xs tracking-wider uppercase text-neutral-500 font-medium">Search</span>
             </button>
           </div>
 
-          {/* Center: Brand Name RIWAAYAT WEAR (Centered, Elegant) */}
-          <div className="w-2/4 text-center">
+          {/* Center: Brand Name RIWAAYAT WEAR (Centered, Bold, ample breathing room) */}
+          <div className="flex-1 text-center px-2">
             <a 
               href="#"
               onClick={(e) => {
@@ -72,29 +66,38 @@ export function Header({
               }}
               className="inline-block group"
             >
-              <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl tracking-[0.25em] sm:tracking-[0.3em] font-bold text-[#121212] uppercase transition-colors group-hover:text-[#997B2C]">
+              <h1 className="font-brand text-xl min-[400px]:text-2xl sm:text-3xl md:text-4xl tracking-normal font-black text-black uppercase transition-colors group-hover:text-[#997B2C] select-none whitespace-nowrap">
                 RIWAAYAT WEAR
               </h1>
-              <p className="text-[9px] sm:text-[10px] tracking-[0.3em] uppercase text-[#C5A059] font-medium -mt-1 hidden sm:block">
+              <p className="text-[8px] sm:text-[10px] tracking-[0.25em] uppercase text-[#C5A059] font-semibold -mt-0.5 hidden min-[360px]:block">
                 Timeless Tradition, Modern Style
               </p>
             </a>
           </div>
 
-          {/* Right: Shopping Cart Icon */}
-          <div className="flex items-center justify-end gap-3 w-1/4">
+          {/* Right: Shopping Cart Icon & Options Menu */}
+          <div className="flex items-center justify-end gap-1.5 sm:gap-3 w-16 sm:w-1/4">
             <button
               onClick={onOpenCart}
-              className="relative p-2.5 rounded-full hover:bg-[#121212]/5 text-[#121212] transition-colors focus:outline-none focus:ring-1 focus:ring-[#D4AF37]"
+              className="relative p-2 sm:p-2.5 rounded-full hover:bg-[#121212]/5 text-[#121212] transition-colors focus:outline-none focus:ring-1 focus:ring-[#D4AF37]"
               aria-label={`Shopping Cart with ${cartCount} items`}
             >
-              <ShoppingBag className="w-6 h-6" />
+              <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6" />
               {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 flex items-center justify-center min-w-[20px] h-5 px-1 rounded-full bg-[#121212] text-[#D4AF37] border border-[#D4AF37] text-[11px] font-bold">
+                <span className="absolute -top-1 -right-1 flex items-center justify-center min-w-[18px] sm:min-w-[20px] h-4.5 sm:h-5 px-1 rounded-full bg-[#121212] text-[#D4AF37] border border-[#D4AF37] text-[10px] sm:text-[11px] font-bold">
                   {cartCount}
                 </span>
               )}
             </button>
+
+            <ThreeDotMenu
+              onOpenAbout={onOpenAbout}
+              onOpenContact={onOpenContact}
+              onOpenPrivacy={onOpenPrivacy}
+              onOpenAdmin={onOpenAdmin}
+              isAdminLoggedIn={isAdminLoggedIn}
+              align="right"
+            />
           </div>
         </div>
 

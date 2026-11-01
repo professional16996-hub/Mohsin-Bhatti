@@ -70,17 +70,20 @@ export function AdminLoginModal({ isOpen, onClose, onLoginSuccess }: AdminLoginM
 
         {/* Brand Kicker */}
         <div className="text-center mb-6">
-          <div className="w-14 h-14 rounded-full bg-[#D4AF37]/15 border border-[#D4AF37]/40 text-[#D4AF37] flex items-center justify-center mx-auto mb-3 shadow-inner">
-            <Shield className="w-7 h-7" />
+          <div className="relative w-16 h-16 rounded-full bg-[#D4AF37]/15 border border-[#D4AF37]/40 text-[#D4AF37] flex items-center justify-center mx-auto mb-3 shadow-inner">
+            <Lock className="w-7 h-7 text-[#D4AF37]" />
+            <div className="absolute -bottom-1 -right-1 bg-amber-950 border border-[#D4AF37] rounded-full p-1 text-white">
+              <Shield className="w-3.5 h-3.5 text-[#D4AF37]" />
+            </div>
           </div>
           <span className="text-[10px] tracking-[0.3em] uppercase text-[#D4AF37] font-bold block">
-            Authorized Personnel Only
+            Locked · Authorized Access Only
           </span>
           <h2 className="font-serif text-2xl sm:text-3xl font-medium tracking-wide text-white mt-1">
             Admin Management Suite
           </h2>
           <p className="text-xs text-neutral-400 mt-1.5">
-            RIWAAYAT WEAR Atelier & Store Operations
+            Enter your credentials to unlock RIWAAYAT WEAR operations
           </p>
         </div>
 

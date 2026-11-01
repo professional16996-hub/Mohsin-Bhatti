@@ -6,7 +6,7 @@
   },
   "siteContent": {
     "brandName": "RIWAAYAT WEAR",
-    "tagline": "Timeless Tradition, Modern Style.",
+    "tagline": "Timeless Tradition, Royal Modern Style.",
     "heroHeadline": "Timeless Tradition, Modern You",
     "heroSubheadline": "Discover premium Pakistani fashion crafted with elegance, comfort and quality.",
     "whatsappNumber": "03210424424",
@@ -22,6 +22,10 @@
     "Women's Shalwar Kameez",
     "Men's Waistcoats",
     "Women's Unstitched Suits",
+    "Kurta & Prince Coats",
+    "Luxury Shawls & Chaddars",
+    "Velvet Winter Edition",
+    "Footwear & Khussa",
     "New Arrivals",
     "Best Sellers"
   ],
@@ -35,26 +39,11 @@
       "image": "/src/assets/images/mens_shalwar_kameez_1793388068297.jpg",
       "description": "Crafted from 100% Giza Egyptian cotton with subtle tonal hand-embroidery along the mandarin band collar and cuffs. Tailored in a modern relaxed Pakistani silhouette with matching pleated shalwar.",
       "fabric": "100% Giza Egyptian Cotton (Liquid Finished)",
-      "sizes": [
-        "S",
-        "M",
-        "L",
-        "XL",
-        "XXL"
-      ],
+      "sizes": ["S", "M", "L", "XL", "XXL"],
       "colors": [
-        {
-          "name": "Obsidian Black",
-          "hex": "#111111"
-        },
-        {
-          "name": "Charcoal Grey",
-          "hex": "#333333"
-        },
-        {
-          "name": "Midnight Navy",
-          "hex": "#14213d"
-        }
+        { "name": "Obsidian Black", "hex": "#111111" },
+        { "name": "Charcoal Grey", "hex": "#333333" },
+        { "name": "Midnight Navy", "hex": "#14213d" }
       ],
       "isNewArrival": true,
       "isBestSeller": true,
@@ -72,32 +61,17 @@
       "image": "/src/assets/images/womens_shalwar_kameez_1793388080478.jpg",
       "description": "Exquisite champagne gold and ivory cream stitched ensemble featuring delicate zardozi and dabka needlework. Accompanied by a pure organza embroidered dupatta and tapered raw silk trousers.",
       "fabric": "Pure Raw Silk Shirt with Tissue Organza Dupatta",
-      "sizes": [
-        "XS",
-        "S",
-        "M",
-        "L",
-        "XL"
-      ],
+      "sizes": ["XS", "S", "M", "L", "XL"],
       "colors": [
-        {
-          "name": "Champagne Ivory",
-          "hex": "#F5ECD7"
-        },
-        {
-          "name": "Rose Gold",
-          "hex": "#E0B5B1"
-        },
-        {
-          "name": "Pearl White",
-          "hex": "#FFFFFF"
-        }
+        { "name": "Champagne Ivory", "hex": "#F5ECD7" },
+        { "name": "Rose Gold", "hex": "#E0B5B1" },
+        { "name": "Pearl White", "hex": "#FFFFFF" }
       ],
       "isNewArrival": true,
       "isBestSeller": true,
       "inStock": true,
       "stockQuantity": 28,
-      "rating": 5,
+      "rating": 5.0,
       "reviewsCount": 47
     },
     {
@@ -109,25 +83,11 @@
       "image": "/src/assets/images/mens_waistcoat_1793388092885.jpg",
       "description": "Hand-tailored Jamawar brocade waistcoat with antique gold paisley motifs and custom embossed metal buttons. Designed to elevate any plain shalwar kameez for festive occasions.",
       "fabric": "Pure Silk Jamawar with Breathable Viscose Lining",
-      "sizes": [
-        "38 (S)",
-        "40 (M)",
-        "42 (L)",
-        "44 (XL)"
-      ],
+      "sizes": ["38 (S)", "40 (M)", "42 (L)", "44 (XL)"],
       "colors": [
-        {
-          "name": "Antique Gold",
-          "hex": "#C5A059"
-        },
-        {
-          "name": "Matte Black",
-          "hex": "#1c1c1c"
-        },
-        {
-          "name": "Royal Emerald",
-          "hex": "#0f4c3a"
-        }
+        { "name": "Antique Gold", "hex": "#C5A059" },
+        { "name": "Matte Black", "hex": "#1c1c1c" },
+        { "name": "Royal Emerald", "hex": "#0f4c3a" }
       ],
       "isNewArrival": false,
       "isBestSeller": true,
@@ -145,22 +105,11 @@
       "image": "/src/assets/images/womens_unstitched_1793388105812.jpg",
       "description": "Signature 3-piece unstitched luxury lawn ensemble with heavy tilla embroidery, embroidered organza border patches, dyed cotton trousers, and foil-printed pure chiffon dupatta.",
       "fabric": "Luxury Pima Lawn & Embroidered Chiffon",
-      "sizes": [
-        "Unstitched (3-Piece Standard Fabric)"
-      ],
+      "sizes": ["Unstitched (3-Piece Standard Fabric)"],
       "colors": [
-        {
-          "name": "Midnight Black",
-          "hex": "#0D0D0D"
-        },
-        {
-          "name": "Deep Crimson",
-          "hex": "#581845"
-        },
-        {
-          "name": "Teal Peacock",
-          "hex": "#004c54"
-        }
+        { "name": "Midnight Black", "hex": "#0D0D0D" },
+        { "name": "Deep Crimson", "hex": "#581845" },
+        { "name": "Teal Peacock", "hex": "#004c54" }
       ],
       "isNewArrival": true,
       "isBestSeller": false,
@@ -178,25 +127,11 @@
       "image": "/src/assets/images/mens_shalwar_kameez_1793388068297.jpg",
       "description": "Pure optic white Pakistani shalwar kameez tailored from wrinkle-resistant blended cotton wash-and-wear. Features immaculate thread detailing and horn-finished buttons.",
       "fabric": "Superfine Wrinkle-Resistant Wash & Wear",
-      "sizes": [
-        "S",
-        "M",
-        "L",
-        "XL"
-      ],
+      "sizes": ["S", "M", "L", "XL"],
       "colors": [
-        {
-          "name": "Crisp White",
-          "hex": "#FFFFFF"
-        },
-        {
-          "name": "Off-White / Cream",
-          "hex": "#FAF6EE"
-        },
-        {
-          "name": "Soft Almond",
-          "hex": "#E8D8C8"
-        }
+        { "name": "Crisp White", "hex": "#FFFFFF" },
+        { "name": "Off-White / Cream", "hex": "#FAF6EE" },
+        { "name": "Soft Almond", "hex": "#E8D8C8" }
       ],
       "isNewArrival": false,
       "isBestSeller": true,
@@ -214,21 +149,10 @@
       "image": "/src/assets/images/mens_waistcoat_1793388092885.jpg",
       "description": "Micro-velvet black waistcoat finished with hand-crafted kora dabka along the ban collar and double jet welt pockets. The pinnacle of winter formal sophistication.",
       "fabric": "Imported Micro Velvet (Midnight Tone)",
-      "sizes": [
-        "38 (S)",
-        "40 (M)",
-        "42 (L)",
-        "44 (XL)"
-      ],
+      "sizes": ["38 (S)", "40 (M)", "42 (L)", "44 (XL)"],
       "colors": [
-        {
-          "name": "Matte Obsidian",
-          "hex": "#0A0A0A"
-        },
-        {
-          "name": "Bottle Green",
-          "hex": "#1B4D3E"
-        }
+        { "name": "Matte Obsidian", "hex": "#0A0A0A" },
+        { "name": "Bottle Green", "hex": "#1B4D3E" }
       ],
       "isNewArrival": true,
       "isBestSeller": false,
@@ -246,60 +170,234 @@
       "image": "/src/assets/images/womens_shalwar_kameez_1793388080478.jpg",
       "description": "Pastel pistachio and gold dabka embroidered kalidar frock with churidar pajama. Accented with mirrorwork borders and pure silk dupatta with scallop edging.",
       "fabric": "Pure Silk Chiffon with Silk Slip",
-      "sizes": [
-        "XS",
-        "S",
-        "M",
-        "L"
-      ],
+      "sizes": ["XS", "S", "M", "L"],
       "colors": [
-        {
-          "name": "Pistachio Sage",
-          "hex": "#D2DBC8"
-        },
-        {
-          "name": "Pale Lavender",
-          "hex": "#E6E1E8"
-        }
+        { "name": "Pistachio Sage", "hex": "#D2DBC8" },
+        { "name": "Pale Lavender", "hex": "#E6E1E8" }
       ],
       "isNewArrival": true,
       "isBestSeller": false,
       "inStock": true,
       "stockQuantity": 15,
-      "rating": 5,
+      "rating": 5.0,
       "reviewsCount": 19
     },
     {
       "id": "rw-prod-008",
-      "name": "Heritage Chikankari Luxury 3-Piece Unstitched",
-      "category": "Women's Unstitched Suits",
-      "price": 13800,
-      "originalPrice": 16000,
-      "image": "/src/assets/images/womens_unstitched_1793388105812.jpg",
-      "description": "Intricate Kashmiri Chikankari needlework on pure cotton lawn shirt with digital printed silk dupatta and dyed cambric trousers. Ideal for summer and Eid festivities.",
-      "fabric": "Fine Cotton Lawn with Silk Dupatta",
-      "sizes": [
-        "Unstitched (3-Piece Complete)"
-      ],
+      "name": "Sultan Royal Maroon Silk Embroidered Kurta",
+      "category": "Kurta & Prince Coats",
+      "price": 10500,
+      "originalPrice": 13000,
+      "image": "/src/assets/images/mens_festive_kurta_1793555610054.jpg",
+      "description": "Hand-embroidered rich maroon raw silk kurta with intricate gold tilla threadwork along the neckline, placket, and sleeve borders. Paired with tailored matching silk churidar / trousers for festive wedding and Eid wear.",
+      "fabric": "Pure Raw Silk with Tilla Threadwork",
+      "sizes": ["S", "M", "L", "XL", "XXL"],
       "colors": [
-        {
-          "name": "Jet Black & Gold",
-          "hex": "#141414"
-        },
-        {
-          "name": "Butter Cream",
-          "hex": "#F5F0DC"
-        }
+        { "name": "Imperial Maroon", "hex": "#631322" },
+        { "name": "Deep Rust", "hex": "#8B311E" }
       ],
-      "isNewArrival": false,
+      "isNewArrival": true,
       "isBestSeller": true,
       "inStock": true,
       "stockQuantity": 32,
+      "rating": 5.0,
+      "reviewsCount": 34
+    },
+    {
+      "id": "rw-prod-009",
+      "name": "Noor-e-Jahan Kashmiri Tilla Pashmina Shawl",
+      "category": "Luxury Shawls & Chaddars",
+      "price": 18500,
+      "originalPrice": 23000,
+      "image": "/src/assets/images/luxury_kashmiri_shawl_1793555467525.jpg",
+      "description": "Mastercrafted pure Kashmiri pashmina wool shawl adorned with delicate antique gold tilla and zardozi paisley border embroidery. Luxuriously warm and drape-finished for regal winter soirees.",
+      "fabric": "100% Pure Fine-spun Kashmiri Pashmina Wool",
+      "sizes": ["Standard Luxury Shawl (2.5m x 1.25m)"],
+      "colors": [
+        { "name": "Royal Obsidian & Gold", "hex": "#111111" },
+        { "name": "Antique Bronze", "hex": "#4A3B2C" }
+      ],
+      "isNewArrival": true,
+      "isBestSeller": true,
+      "inStock": true,
+      "stockQuantity": 24,
+      "rating": 4.9,
+      "reviewsCount": 41
+    },
+    {
+      "id": "rw-prod-010",
+      "name": "Zumurrud Emerald Velvet 3-Piece Couture Ensemble",
+      "category": "Velvet Winter Edition",
+      "price": 24800,
+      "originalPrice": 28500,
+      "image": "/src/assets/images/womens_velvet_suit_1793555754221.jpg",
+      "description": "Opulent deep emerald green micro velvet shirt featuring heavy gold zardozi, kora dabka and beadwork embroidery on the gala, daman, and sleeves. Accompanied by a pure gold tissue organza dupatta and velvet cigarette pants.",
+      "fabric": "Imported Micro Velvet 9000 with Pure Tissue Organza",
+      "sizes": ["XS", "S", "M", "L", "XL"],
+      "colors": [
+        { "name": "Royal Emerald", "hex": "#0B4F3A" },
+        { "name": "Ruby Wine", "hex": "#58111A" }
+      ],
+      "isNewArrival": true,
+      "isBestSeller": true,
+      "inStock": true,
+      "stockQuantity": 18,
+      "rating": 5.0,
+      "reviewsCount": 52
+    },
+    {
+      "id": "rw-prod-011",
+      "name": "Shahzadi Velvet Zari Handcrafted Khussa",
+      "category": "Footwear & Khussa",
+      "price": 4850,
+      "originalPrice": 6200,
+      "image": "/src/assets/images/handcrafted_khussa_1793555786857.jpg",
+      "description": "Artisanal bridal khussa hand-stitched by Lahore master cobblers. Features lush dark emerald velvet upper enriched with antique gold tilla zari needlework, seed pearls, and genuine leather cushioned sole for day-long comfort.",
+      "fabric": "Velvet Upper with Pure Cow Leather Insole & Sole",
+      "sizes": ["36 (6)", "37 (7)", "38 (8)", "39 (9)", "40 (10)", "41 (11)"],
+      "colors": [
+        { "name": "Emerald Velvet & Gold", "hex": "#0D3D2E" },
+        { "name": "Crimson Gold", "hex": "#631322" }
+      ],
+      "isNewArrival": true,
+      "isBestSeller": false,
+      "inStock": true,
+      "stockQuantity": 45,
+      "rating": 4.9,
+      "reviewsCount": 27
+    },
+    {
+      "id": "rw-prod-012",
+      "name": "Peshawari Norozi Double-Sole Leather Chappal",
+      "category": "Footwear & Khussa",
+      "price": 6750,
+      "originalPrice": 8500,
+      "image": "/src/assets/images/mens_peshawari_chappal_1793555771987.jpg",
+      "description": "Authentic Norozi-style handcrafted Peshawari chappal fashioned from full-grain cowhide leather with heavy-duty tyre double-sole and contrast precision hand-stitching. Built to last a lifetime.",
+      "fabric": "100% Full-Grain Cowhide Leather & Norozi Tyre Rubber Sole",
+      "sizes": ["40 (7)", "41 (8)", "42 (9)", "43 (10)", "44 (11)", "45 (12)"],
+      "colors": [
+        { "name": "Midnight Black", "hex": "#111111" },
+        { "name": "Mustard Brown", "hex": "#7B4B28" }
+      ],
+      "isNewArrival": true,
+      "isBestSeller": true,
+      "inStock": true,
+      "stockQuantity": 38,
+      "rating": 5.0,
+      "reviewsCount": 63
+    },
+    {
+      "id": "rw-prod-013",
+      "name": "Mughal Imperial Velvet Embroidered Prince Coat",
+      "category": "Kurta & Prince Coats",
+      "price": 21500,
+      "originalPrice": 26000,
+      "image": "/src/assets/images/mens_prince_coat_1793555803575.jpg",
+      "description": "Impeccably tailored black micro-velvet prince coat with hand-embroidered antique gold bullion thread on the mandarin collar and cuffs. Adorned with handcrafted royal crest brass buttons and silk interior lining.",
+      "fabric": "Imported Micro Velvet with Premium Silk Satin Lining",
+      "sizes": ["38 (S)", "40 (M)", "42 (L)", "44 (XL)", "46 (XXL)"],
+      "colors": [
+        { "name": "Royal Velvet Black", "hex": "#0A0A0A" },
+        { "name": "Deep Midnight Navy", "hex": "#0A192F" }
+      ],
+      "isNewArrival": true,
+      "isBestSeller": true,
+      "inStock": true,
+      "stockQuantity": 22,
+      "rating": 5.0,
+      "reviewsCount": 48
+    },
+    {
+      "id": "rw-prod-014",
+      "name": "Dara Shikoh Hand-Spun Khaddi Cotton Kurta Trouser",
+      "category": "Kurta & Prince Coats",
+      "price": 7450,
+      "originalPrice": 9200,
+      "image": "/src/assets/images/mens_shalwar_kameez_1793388068297.jpg",
+      "description": "Pure breathable handloom khaddi cotton kurta with matching tailored straight trousers. Features traditional hand-knotted thread buttons and subtle running stitch along the placket.",
+      "fabric": "100% Handloom Khaddi Cotton",
+      "sizes": ["S", "M", "L", "XL"],
+      "colors": [
+        { "name": "Charcoal Slate", "hex": "#2F3542" },
+        { "name": "Raw Ecru", "hex": "#EAE5D9" },
+        { "name": "Almond Tan", "hex": "#C2A382" }
+      ],
+      "isNewArrival": true,
+      "isBestSeller": false,
+      "inStock": true,
+      "stockQuantity": 50,
       "rating": 4.8,
-      "reviewsCount": 31
+      "reviewsCount": 19
     }
   ],
   "orders": [
+    {
+      "id": "RW-2988",
+      "customerName": "Zainab Bibi",
+      "phone": "03001234567",
+      "email": "",
+      "address": "DHA Phase 5, Lahore",
+      "city": "Lahore",
+      "notes": "",
+      "items": [
+        {
+          "productId": "rw-prod-002",
+          "quantity": 1,
+          "price": 18950
+        }
+      ],
+      "subtotal": 18950,
+      "shippingFee": 0,
+      "total": 18950,
+      "paymentMethod": "Cash on Delivery",
+      "status": "Pending",
+      "createdAt": "2026-11-01T17:37:28.038Z"
+    },
+    {
+      "id": "RW-6516",
+      "customerName": "Zainab Bibi",
+      "phone": "03001234567",
+      "email": "",
+      "address": "DHA Phase 5, Lahore",
+      "city": "Lahore",
+      "notes": "",
+      "items": [
+        {
+          "productId": "rw-prod-002",
+          "quantity": 1,
+          "price": 18950
+        }
+      ],
+      "subtotal": 18950,
+      "shippingFee": 0,
+      "total": 18950,
+      "paymentMethod": "Cash on Delivery",
+      "status": "Pending",
+      "createdAt": "2026-11-01T17:37:11.599Z"
+    },
+    {
+      "id": "RW-3979",
+      "customerName": "Test",
+      "phone": "03001234567",
+      "email": "",
+      "address": "Lahore",
+      "city": "Lahore",
+      "notes": "",
+      "items": [
+        {
+          "productId": "rw-prod-002",
+          "quantity": 1,
+          "price": 1000
+        }
+      ],
+      "subtotal": 1000,
+      "shippingFee": 0,
+      "total": 1000,
+      "paymentMethod": "Cash on Delivery",
+      "status": "Pending",
+      "createdAt": "2026-11-01T17:33:46.479Z"
+    },
     {
       "id": "RW-9021",
       "customerName": "Muhammad Hamza Khan",
@@ -322,7 +420,7 @@
       "shippingFee": 0,
       "total": 9850,
       "paymentMethod": "Cash on Delivery",
-      "status": "Processing",
+      "status": "Confirmed",
       "notes": "Please ensure timely delivery before Eid.",
       "createdAt": "2026-10-28T14:30:00Z"
     },
@@ -354,6 +452,36 @@
     }
   ],
   "inquiries": [
+    {
+      "id": "inq-1793554648044",
+      "name": "Usman Ali",
+      "email": "usman@gmail.com",
+      "phone": "",
+      "subject": "General Inquiry",
+      "message": "Do you deliver in Islamabad?",
+      "createdAt": "2026-11-01T17:37:28.044Z",
+      "status": "New"
+    },
+    {
+      "id": "inq-1793554631605",
+      "name": "Usman Ali",
+      "email": "usman@gmail.com",
+      "phone": "",
+      "subject": "General Inquiry",
+      "message": "Do you deliver in Islamabad within 2 days?",
+      "createdAt": "2026-11-01T17:37:11.605Z",
+      "status": "New"
+    },
+    {
+      "id": "inq-1793554426489",
+      "name": "Ali",
+      "email": "ali@test.com",
+      "phone": "",
+      "subject": "General Inquiry",
+      "message": "Hello",
+      "createdAt": "2026-11-01T17:33:46.489Z",
+      "status": "New"
+    },
     {
       "id": "inq-001",
       "name": "Bilal Ahmed",
