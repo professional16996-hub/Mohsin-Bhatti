@@ -20,6 +20,8 @@ import { AdminLoginModal } from './components/AdminPanel/AdminLoginModal';
 import { AdminDashboard } from './components/AdminPanel/AdminDashboard';
 import { Sparkles, SlidersHorizontal, Check } from 'lucide-react';
 
+import { api } from './utils/apiClient';
+
 export default function App() {
   // State
   const [products, setProducts] = useState<Product[]>([]);
@@ -87,20 +89,17 @@ export default function App() {
     }
   }, [cartItems]);
 
-  // Fetch initial products and content from database
+  // Fetch initial products and content from database / local fallback
   const loadData = async () => {
     try {
-      const pRes = await fetch('/api/products');
-      const pData = await pRes.json();
-      if (pData.products) setProducts(pData.products);
-
-      const cRes = await fetch('/api/categories');
-      const cData = await cRes.json();
-      if (cData.categories) setCategories(cData.categories);
-
-      const cntRes = await fetch('/api/content');
-      const cntData = await cntRes.json();
-      if (cntData.content) setSiteContent(cntData.content);
+      const [prods, cats, cnt] = await Promise.all([
+        api.getProducts(),
+        api.getCategories(),
+        api.getContent(),
+      ]);
+      if (prods && prods.length > 0) setProducts(prods);
+      if (cats && cats.length > 0) setCategories(cats);
+      if (cnt) setSiteContent(cnt);
     } catch (err) {
       console.error('Failed to load store data:', err);
     } finally {
@@ -113,10 +112,7 @@ export default function App() {
     loadData();
     const storedToken = sessionStorage.getItem('rw_admin_token') || localStorage.getItem('rw_admin_token');
     if (storedToken) {
-      fetch('/api/admin/verify', {
-        headers: { Authorization: `Bearer ${storedToken}` },
-      })
-        .then((r) => r.json())
+      api.verify(storedToken)
         .then((data) => {
           if (data.valid && data.user) {
             setAdminToken(storedToken);

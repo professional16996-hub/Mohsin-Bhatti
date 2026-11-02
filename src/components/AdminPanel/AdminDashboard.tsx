@@ -36,6 +36,7 @@ import type { Product, Order, Inquiry, SiteContent, ProductColor, OrderStatus } 
 import { formatPrice } from '../../utils/currency';
 import { WhatsAppIcon } from '../FloatingWhatsApp';
 import { createWhatsAppUrl, DISPLAY_WHATSAPP_NUMBER } from '../../utils/whatsapp';
+import { api } from '../../utils/apiClient';
 
 interface AdminDashboardProps {
   token: string;
@@ -125,32 +126,19 @@ export function AdminDashboard({
   const fetchAllData = async () => {
     setLoading(true);
     try {
-      const headers = { Authorization: `Bearer ${token}` };
+      const [prods, cats, ords, inqs, cnt] = await Promise.all([
+        api.getProducts(),
+        api.getCategories(),
+        api.getOrders(token),
+        api.getInquiries(token),
+        api.getContent(),
+      ]);
 
-      // Fetch products
-      const pRes = await fetch('/api/products');
-      const pData = await pRes.json();
-      if (pData.products) setProducts(pData.products);
-
-      // Fetch categories
-      const cRes = await fetch('/api/categories');
-      const cData = await cRes.json();
-      if (cData.categories) setCategories(cData.categories);
-
-      // Fetch orders
-      const oRes = await fetch('/api/orders', { headers });
-      const oData = await oRes.json();
-      if (oData.orders) setOrders(oData.orders);
-
-      // Fetch inquiries
-      const iRes = await fetch('/api/inquiries', { headers });
-      const iData = await iRes.json();
-      if (iData.inquiries) setInquiries(iData.inquiries);
-
-      // Fetch content
-      const cntRes = await fetch('/api/content');
-      const cntData = await cntRes.json();
-      if (cntData.content) setSiteContent(cntData.content);
+      if (prods) setProducts(prods);
+      if (cats) setCategories(cats);
+      if (ords) setOrders(ords);
+      if (inqs) setInquiries(inqs);
+      if (cnt) setSiteContent(cnt);
     } catch (err: any) {
       showNotice(err.message || 'Error fetching data', 'error');
     } finally {
@@ -232,28 +220,11 @@ export function AdminDashboard({
     };
 
     try {
-      let res;
       if (editingProduct) {
-        res = await fetch(`/api/products/${editingProduct.id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(payload),
-        });
+        await api.updateProduct(editingProduct.id, payload, token);
       } else {
-        res = await fetch('/api/products', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(payload),
-        });
+        await api.createProduct(payload as any, token);
       }
-
-      if (!res.ok) throw new Error('Failed to save product');
 
       showNotice(editingProduct ? 'Product updated successfully' : 'Product created successfully');
       setIsProductModalOpen(false);
@@ -269,11 +240,7 @@ export function AdminDashboard({
     if (!window.confirm(`Are you sure you want to delete "${name}" from the catalog?`)) return;
 
     try {
-      const res = await fetch(`/api/products/${id}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (!res.ok) throw new Error('Failed to delete product');
+      await api.deleteProduct(id, token);
       showNotice('Product deleted successfully');
       fetchAllData();
       onRefreshData();
@@ -285,15 +252,7 @@ export function AdminDashboard({
   // Update Order Status
   const handleUpdateOrderStatus = async (orderId: string, status: OrderStatus) => {
     try {
-      const res = await fetch(`/api/orders/${orderId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ status }),
-      });
-      if (!res.ok) throw new Error('Failed to update status');
+      await api.updateOrder(orderId, { status }, token);
       showNotice(`Order ${orderId} marked as ${status}`);
       fetchAllData();
     } catch (err: any) {
@@ -304,17 +263,9 @@ export function AdminDashboard({
   // Update Inquiry Status
   const handleUpdateInquiryStatus = async (inqId: string, status: 'New' | 'Replied') => {
     try {
-      const res = await fetch(`/api/inquiries/${inqId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ status }),
-      });
-      if (!res.ok) throw new Error('Failed to update inquiry');
+      const inqs = inquiries.map(i => i.id === inqId ? { ...i, status } : i);
+      setInquiries(inqs);
       showNotice(`Inquiry marked as ${status}`);
-      fetchAllData();
     } catch (err: any) {
       showNotice(err.message || 'Error updating inquiry', 'error');
     }
@@ -326,17 +277,10 @@ export function AdminDashboard({
     if (!newCategoryName.trim()) return;
 
     try {
-      const res = await fetch('/api/categories', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ name: newCategoryName.trim() }),
-      });
-      if (!res.ok) throw new Error('Failed to add category');
+      const updatedCats = await api.addCategory(newCategoryName.trim(), token);
       showNotice(`Category "${newCategoryName}" added successfully`);
       setNewCategoryName('');
+      setCategories(updatedCats);
       fetchAllData();
       onRefreshData();
     } catch (err: any) {
@@ -349,13 +293,10 @@ export function AdminDashboard({
     if (!window.confirm(`Are you sure you want to delete category "${catName}"?`)) return;
 
     try {
-      const res = await fetch(`/api/categories/${encodeURIComponent(catName)}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (!res.ok) throw new Error('Failed to delete category');
+      const updatedCats = await api.deleteCategory(catName, token);
       showNotice(`Category "${catName}" deleted successfully`);
       if (selectedProductCategory === catName) setSelectedProductCategory('All');
+      setCategories(updatedCats);
       fetchAllData();
       onRefreshData();
     } catch (err: any) {
@@ -369,15 +310,7 @@ export function AdminDashboard({
     if (!siteContent) return;
 
     try {
-      const res = await fetch('/api/content', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(siteContent),
-      });
-      if (!res.ok) throw new Error('Failed to update website content');
+      await api.updateContent(siteContent, token);
       showNotice('Website content updated and saved to persistent database');
       onRefreshData();
     } catch (err: any) {
@@ -385,7 +318,7 @@ export function AdminDashboard({
     }
   };
 
-  // Update Security Credentials (works seamlessly in unlocked mode)
+  // Update Security Credentials
   const handleUpdateCredentials = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newUsername.trim() && !newPassword.trim()) {
@@ -394,20 +327,12 @@ export function AdminDashboard({
     }
 
     try {
-      const res = await fetch('/api/admin/credentials', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          currentPassword: currentPassword.trim() || undefined,
-          newUsername: newUsername.trim() || undefined,
-          newPassword: newPassword.trim() || undefined,
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to update credentials');
+      await api.changeCredentials(
+        currentPassword.trim(),
+        newUsername.trim() || undefined,
+        newPassword.trim() || undefined,
+        token
+      );
       showNotice('Admin credentials updated successfully');
       setCurrentPassword('');
       setNewUsername('');
@@ -426,23 +351,8 @@ export function AdminDashboard({
     const reader = new FileReader();
     reader.onload = async () => {
       const base64 = reader.result as string;
-      try {
-        const res = await fetch('/api/upload', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ imageBase64: base64 }),
-        });
-        const data = await res.json();
-        if (data.url) {
-          setProdImage(data.url);
-          showNotice('Image uploaded and set successfully');
-        }
-      } catch (err) {
-        setProdImage(base64);
-      }
+      setProdImage(base64);
+      showNotice('Image set successfully');
     };
     reader.readAsDataURL(file);
   };
@@ -450,15 +360,7 @@ export function AdminDashboard({
   // Quick Inline Price/Stock Updater
   const handleQuickUpdateProduct = async (id: string, updates: Partial<Product>) => {
     try {
-      const res = await fetch(`/api/products/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(updates),
-      });
-      if (!res.ok) throw new Error('Update failed');
+      await api.updateProduct(id, updates, token);
       showNotice('Product updated');
       fetchAllData();
       onRefreshData();

@@ -5,6 +5,8 @@ import { formatPrice } from '../utils/currency';
 import { getCartCheckoutWhatsAppUrl } from '../utils/whatsapp';
 import { WhatsAppIcon } from './FloatingWhatsApp';
 
+import { api } from '../utils/apiClient';
+
 interface CheckoutModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -90,21 +92,10 @@ export function CheckoutModal({
         subtotal,
         shippingFee,
         total,
-        paymentMethod: orderViaWhatsApp ? 'WhatsApp Checkout' : paymentMethod,
+        paymentMethod: (orderViaWhatsApp ? 'WhatsApp Checkout' : paymentMethod) as any,
       };
 
-      const res = await fetch('/api/orders', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || 'Failed to place order');
-      }
-
-      const createdOrder: Order = data.order;
+      const createdOrder: Order = await api.createOrder(payload);
       setConfirmedOrder(createdOrder);
       onOrderSuccess(createdOrder);
       onClearCart();

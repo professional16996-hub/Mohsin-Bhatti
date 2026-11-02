@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { MapPin, Phone, Mail, Clock, Send, CheckCircle } from 'lucide-react';
 import { DISPLAY_WHATSAPP_NUMBER, createWhatsAppUrl } from '../utils/whatsapp';
 import { WhatsAppIcon } from './FloatingWhatsApp';
+import { api } from '../utils/apiClient';
 
 export function ContactLocationSection() {
   const [name, setName] = useState('');
@@ -23,21 +24,13 @@ export function ContactLocationSection() {
     setErrorText('');
 
     try {
-      const res = await fetch('/api/inquiries', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: name.trim(),
-          email: email.trim(),
-          phone: phone.trim(),
-          subject: subject.trim(),
-          message: message.trim(),
-        }),
+      await api.createInquiry({
+        name: name.trim(),
+        email: email.trim(),
+        phone: phone.trim(),
+        subject: subject.trim(),
+        message: message.trim(),
       });
-
-      if (!res.ok) {
-        throw new Error('Failed to send inquiry. Please try again.');
-      }
 
       setStatus('success');
       setName('');

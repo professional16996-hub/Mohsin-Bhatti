@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { X, Lock, Shield, KeyRound, AlertCircle, Sparkles } from 'lucide-react';
 
+import { api } from '../../utils/apiClient';
+
 interface AdminLoginModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -33,17 +35,7 @@ export function AdminLoginModal({ isOpen, onClose, onLoginSuccess }: AdminLoginM
     setError('');
 
     try {
-      const res = await fetch('/api/admin/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: username.trim(), password }),
-      });
-
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || 'Authentication failed');
-      }
-
+      const data = await api.login(username.trim(), password);
       localStorage.setItem('rw_admin_token', data.token);
       onLoginSuccess(data.token, data.user);
       onClose();
